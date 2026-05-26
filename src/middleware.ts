@@ -6,6 +6,10 @@ import { updateSession } from '@/lib/supabase/middleware';
 const intlMiddleware = createMiddleware(routing);
 
 export async function middleware(request: NextRequest) {
+	if (request.nextUrl.pathname.startsWith('/auth/callback')) {
+		return updateSession(request, NextResponse.next());
+	}
+
 	const response = intlMiddleware(request) ?? NextResponse.next();
 	return updateSession(request, response);
 }
