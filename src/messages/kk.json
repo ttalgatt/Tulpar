@@ -1,0 +1,226 @@
+{
+	"common": {
+		"appName": "Tulpar",
+		"tagline": "Қазақстан бойынша жануарлар туралы хабарландырулар",
+		"loading": "Жүктелуде...",
+		"save": "Сақтау",
+		"cancel": "Бас тарту",
+		"delete": "Жою",
+		"edit": "Өңдеу",
+		"back": "Артқа",
+		"next": "Әрі қарай",
+		"submit": "Жіберу",
+		"search": "Іздеу",
+		"all": "Барлығы",
+		"from": "бастап",
+		"to": "дейін",
+		"yes": "Иә",
+		"no": "Жоқ",
+		"more": "Толығырақ",
+		"close": "Жабу",
+		"language": "Тіл",
+		"required": "Міндетті өріс",
+		"errorTitle": "Бірдеңе дұрыс болмады",
+		"tryAgain": "Қайталап көріңіз"
+	},
+	"nav": {
+		"home": "Басты бет",
+		"listings": "Хабарландырулар",
+		"livestock": "Мал",
+		"goods": "Тауарлар",
+		"services": "Қызметтер",
+		"events": "Іс-шаралар",
+		"createListing": "Орналастыру",
+		"signIn": "Кіру",
+		"signUp": "Тіркелу",
+		"signOut": "Шығу",
+		"profile": "Профиль",
+		"myListings": "Менің хабарландыруларым",
+		"favorites": "Таңдаулылар",
+		"admin": "Әкімшілік"
+	},
+	"footer": {
+		"about": "Жоба туралы",
+		"terms": "Пайдалану шарттары",
+		"privacy": "Құпиялылық",
+		"contacts": "Байланыс",
+		"copyright": "© {year} Tulpar. Барлық құқықтар қорғалған."
+	},
+	"home": {
+		"heroTitle": "Адал досыңызды немесе арман шаруашылығыңызды табыңыз",
+		"heroSubtitle": "Қазақстан бойынша үй жануарлары, мал, тауарлар мен қызметтер туралы мыңдаған хабарландыру",
+		"searchPlaceholder": "Сіз не іздеп жүрсіз? Мысалы, овчарка күшігі",
+		"browseAll": "Барлық хабарландыруларды қарау",
+		"createCta": "Хабарландыру орналастыру",
+		"popularCategories": "Танымал санаттар",
+		"recentListings": "Жаңа хабарландырулар",
+		"upcomingEvents": "Жақын іс-шаралар",
+		"viewAll": "Барлығын қарау"
+	},
+	"auth": {
+		"signInTitle": "Tulpar-ға кіру",
+		"signInSubtitle": "Email мен құпиясөзді енгізіңіз",
+		"signUpTitle": "Тіркелу",
+		"signUpSubtitle": "Хабарландыру орналастыру үшін аккаунт жасаңыз",
+		"email": "Email",
+		"password": "Құпиясөз",
+		"passwordConfirm": "Құпиясөзді қайталаңыз",
+		"fullName": "Аты-жөні",
+		"signIn": "Кіру",
+		"signUp": "Тіркелу",
+		"forgotPassword": "Құпиясөзді ұмыттыңыз ба?",
+		"resetPasswordTitle": "Құпиясөзді қалпына келтіру",
+		"resetPasswordSubtitle": "Email-ге сілтеме жібереміз",
+		"sendResetLink": "Сілтеме жіберу",
+		"resetLinkSent": "Хат жіберілді. Поштаны тексеріңіз.",
+		"noAccount": "Аккаунт жоқ па?",
+		"haveAccount": "Аккаунт бар ма?",
+		"checkEmail": "Поштаны тексеріп, тіркеуді растаңыз",
+		"invalidCredentials": "Email немесе құпиясөз қате",
+		"emailTaken": "Бұл email қолданыста",
+		"weakPassword": "Құпиясөз кемінде 8 таңбадан тұруы керек",
+		"passwordsMismatch": "Құпиясөздер сәйкес келмейді"
+	},
+	"profile": {
+		"title": "Профиль",
+		"fullName": "Аты-жөні",
+		"phone": "Телефон",
+		"email": "Email",
+		"avatar": "Аватар",
+		"updated": "Профиль жаңартылды",
+		"changePassword": "Құпиясөзді өзгерту"
+	},
+	"listings": {
+		"title": "Хабарландырулар",
+		"empty": "Әзірге хабарландыру жоқ",
+		"createTitle": "Жаңа хабарландыру",
+		"editTitle": "Хабарландыруды өңдеу",
+		"steps": {
+			"category": "Санат",
+			"details": "Сипаттама",
+			"location": "Орналасуы",
+			"photos": "Фото",
+			"review": "Алдын ала қарау"
+		},
+		"fields": {
+			"category": "Санат",
+			"titleRu": "Тақырып (орысша)",
+			"titleKk": "Тақырып (қазақша)",
+			"descriptionRu": "Сипаттама (орысша)",
+			"descriptionKk": "Сипаттама (қазақша)",
+			"price": "Бағасы",
+			"currency": "Валюта",
+			"dealType": "Мәміле түрі",
+			"quantity": "Саны",
+			"unit": "Өлшем",
+			"isBulk": "Көтерме / үйір",
+			"region": "Облыс",
+			"city": "Қала",
+			"district": "Аудан",
+			"photos": "Фотолар"
+		},
+		"dealTypes": {
+			"sale": "Сату",
+			"gift": "Сыйға беру",
+			"exchange": "Айырбас"
+		},
+		"units": {
+			"piece": "дана",
+			"head": "бас",
+			"kg": "кг"
+		},
+		"statuses": {
+			"draft": "Қаралама",
+			"pending": "Модерацияда",
+			"published": "Жарияланды",
+			"archived": "Алынды",
+			"rejected": "Қабылданбады"
+		},
+		"filters": {
+			"title": "Сүзгілер",
+			"category": "Санат",
+			"location": "Орналасуы",
+			"priceFrom": "Бағасы бастап",
+			"priceTo": "Бағасы дейін",
+			"dealType": "Мәміле түрі",
+			"withPhoto": "Тек фотомен",
+			"reset": "Тазалау",
+			"apply": "Қолдану"
+		},
+		"sort": {
+			"label": "Реттеу",
+			"newest": "Жаңалар",
+			"priceAsc": "Арзан",
+			"priceDesc": "Қымбат"
+		},
+		"card": {
+			"noPhoto": "Фото жоқ",
+			"bulk": "көтерме",
+			"service": "қызмет",
+			"gift": "сыйға"
+		},
+		"detail": {
+			"showPhone": "Телефонды көрсету",
+			"signInToContact": "Байланыс үшін кіріңіз",
+			"description": "Сипаттама",
+			"characteristics": "Сипаттамалары",
+			"seller": "Сатушы",
+			"published": "Жарияланды",
+			"views": "Қаралымдар: {count}",
+			"addFavorite": "Таңдаулыға қосу",
+			"removeFavorite": "Таңдаулыдан алу",
+			"report": "Шағымдану"
+		},
+		"actions": {
+			"create": "Орналастыру",
+			"saveAsDraft": "Қаралама сақтау",
+			"publish": "Жариялау",
+			"submitForReview": "Модерацияға жіберу",
+			"archive": "Жариялаудан алу",
+			"unarchive": "Қайта жариялау"
+		},
+		"my": {
+			"title": "Менің хабарландыруларым",
+			"empty": "Сізде әзірге хабарландыру жоқ",
+			"createFirst": "Біріншісін жасау"
+		},
+		"favorites": {
+			"title": "Таңдаулылар",
+			"empty": "Таңдаулыларда ештеңе жоқ"
+		},
+		"messages": {
+			"created": "Хабарландыру жасалды",
+			"updated": "Хабарландыру жаңартылды",
+			"deleted": "Хабарландыру жойылды",
+			"submittedForReview": "Модерацияға жіберілді"
+		}
+	},
+	"events": {
+		"title": "Іс-шаралар",
+		"empty": "Жоспарланған іс-шара жоқ",
+		"upcoming": "Жақын",
+		"past": "Өткен",
+		"organizer": "Ұйымдастырушы",
+		"venue": "Өткізілетін орны",
+		"date": "Күні"
+	},
+	"admin": {
+		"title": "Әкімшілік панелі",
+		"moderation": "Модерация",
+		"reports": "Шағымдар",
+		"users": "Пайдаланушылар",
+		"categories": "Санаттар",
+		"locations": "Орналасулар",
+		"events": "Іс-шаралар",
+		"queue": "Кезек",
+		"approve": "Растау",
+		"reject": "Қабылдамау",
+		"rejectReason": "Бас тарту себебі",
+		"forbidden": "Қол жеткізу жоқ"
+	},
+	"errors": {
+		"notFound": "Бет табылмады",
+		"goHome": "Басты бетке",
+		"internal": "Серверде ішкі қате"
+	}
+}

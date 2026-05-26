@@ -1,0 +1,226 @@
+{
+	"common": {
+		"appName": "Tulpar",
+		"tagline": "Объявления о животных по всему Казахстану",
+		"loading": "Загрузка...",
+		"save": "Сохранить",
+		"cancel": "Отмена",
+		"delete": "Удалить",
+		"edit": "Редактировать",
+		"back": "Назад",
+		"next": "Далее",
+		"submit": "Отправить",
+		"search": "Поиск",
+		"all": "Все",
+		"from": "от",
+		"to": "до",
+		"yes": "Да",
+		"no": "Нет",
+		"more": "Подробнее",
+		"close": "Закрыть",
+		"language": "Язык",
+		"required": "Обязательное поле",
+		"errorTitle": "Что-то пошло не так",
+		"tryAgain": "Попробуйте ещё раз"
+	},
+	"nav": {
+		"home": "Главная",
+		"listings": "Объявления",
+		"livestock": "Скот",
+		"goods": "Товары",
+		"services": "Услуги",
+		"events": "События",
+		"createListing": "Разместить",
+		"signIn": "Войти",
+		"signUp": "Регистрация",
+		"signOut": "Выйти",
+		"profile": "Профиль",
+		"myListings": "Мои объявления",
+		"favorites": "Избранное",
+		"admin": "Админка"
+	},
+	"footer": {
+		"about": "О проекте",
+		"terms": "Условия использования",
+		"privacy": "Конфиденциальность",
+		"contacts": "Контакты",
+		"copyright": "© {year} Tulpar. Все права защищены."
+	},
+	"home": {
+		"heroTitle": "Найдите верного друга или хозяйство мечты",
+		"heroSubtitle": "Тысячи объявлений о домашних животных, скоте, товарах и услугах по всему Казахстану",
+		"searchPlaceholder": "Что вы ищете? Например, щенок овчарки",
+		"browseAll": "Смотреть все объявления",
+		"createCta": "Разместить объявление",
+		"popularCategories": "Популярные категории",
+		"recentListings": "Свежие объявления",
+		"upcomingEvents": "Ближайшие события",
+		"viewAll": "Смотреть все"
+	},
+	"auth": {
+		"signInTitle": "Вход в Tulpar",
+		"signInSubtitle": "Введите email и пароль",
+		"signUpTitle": "Регистрация",
+		"signUpSubtitle": "Создайте аккаунт, чтобы размещать объявления",
+		"email": "Email",
+		"password": "Пароль",
+		"passwordConfirm": "Повторите пароль",
+		"fullName": "Имя",
+		"signIn": "Войти",
+		"signUp": "Зарегистрироваться",
+		"forgotPassword": "Забыли пароль?",
+		"resetPasswordTitle": "Восстановление пароля",
+		"resetPasswordSubtitle": "Мы пришлём ссылку для сброса пароля на ваш email",
+		"sendResetLink": "Отправить ссылку",
+		"resetLinkSent": "Письмо отправлено. Проверьте почту.",
+		"noAccount": "Нет аккаунта?",
+		"haveAccount": "Уже есть аккаунт?",
+		"checkEmail": "Проверьте почту и подтвердите регистрацию",
+		"invalidCredentials": "Неверный email или пароль",
+		"emailTaken": "Этот email уже используется",
+		"weakPassword": "Пароль должен содержать не менее 8 символов",
+		"passwordsMismatch": "Пароли не совпадают"
+	},
+	"profile": {
+		"title": "Профиль",
+		"fullName": "Имя",
+		"phone": "Телефон",
+		"email": "Email",
+		"avatar": "Аватар",
+		"updated": "Профиль обновлён",
+		"changePassword": "Изменить пароль"
+	},
+	"listings": {
+		"title": "Объявления",
+		"empty": "Объявлений пока нет",
+		"createTitle": "Новое объявление",
+		"editTitle": "Редактирование объявления",
+		"steps": {
+			"category": "Категория",
+			"details": "Описание",
+			"location": "Локация",
+			"photos": "Фото",
+			"review": "Превью"
+		},
+		"fields": {
+			"category": "Категория",
+			"titleRu": "Заголовок (русский)",
+			"titleKk": "Заголовок (қазақша)",
+			"descriptionRu": "Описание (русский)",
+			"descriptionKk": "Описание (қазақша)",
+			"price": "Цена",
+			"currency": "Валюта",
+			"dealType": "Тип сделки",
+			"quantity": "Количество",
+			"unit": "Единица",
+			"isBulk": "Опт / табун",
+			"region": "Область",
+			"city": "Город",
+			"district": "Район",
+			"photos": "Фотографии"
+		},
+		"dealTypes": {
+			"sale": "Продажа",
+			"gift": "В дар",
+			"exchange": "Обмен"
+		},
+		"units": {
+			"piece": "шт",
+			"head": "голов",
+			"kg": "кг"
+		},
+		"statuses": {
+			"draft": "Черновик",
+			"pending": "На модерации",
+			"published": "Опубликовано",
+			"archived": "Снято",
+			"rejected": "Отклонено"
+		},
+		"filters": {
+			"title": "Фильтры",
+			"category": "Категория",
+			"location": "Локация",
+			"priceFrom": "Цена от",
+			"priceTo": "Цена до",
+			"dealType": "Тип сделки",
+			"withPhoto": "Только с фото",
+			"reset": "Сбросить",
+			"apply": "Применить"
+		},
+		"sort": {
+			"label": "Сортировка",
+			"newest": "Новые",
+			"priceAsc": "Дешевле",
+			"priceDesc": "Дороже"
+		},
+		"card": {
+			"noPhoto": "Без фото",
+			"bulk": "опт",
+			"service": "услуга",
+			"gift": "в дар"
+		},
+		"detail": {
+			"showPhone": "Показать телефон",
+			"signInToContact": "Войдите, чтобы увидеть контакты",
+			"description": "Описание",
+			"characteristics": "Характеристики",
+			"seller": "Продавец",
+			"published": "Опубликовано",
+			"views": "Просмотров: {count}",
+			"addFavorite": "В избранное",
+			"removeFavorite": "Из избранного",
+			"report": "Пожаловаться"
+		},
+		"actions": {
+			"create": "Разместить",
+			"saveAsDraft": "Сохранить черновик",
+			"publish": "Опубликовать",
+			"submitForReview": "Отправить на модерацию",
+			"archive": "Снять с публикации",
+			"unarchive": "Опубликовать снова"
+		},
+		"my": {
+			"title": "Мои объявления",
+			"empty": "У вас пока нет объявлений",
+			"createFirst": "Создать первое"
+		},
+		"favorites": {
+			"title": "Избранное",
+			"empty": "В избранном пусто"
+		},
+		"messages": {
+			"created": "Объявление создано",
+			"updated": "Объявление обновлено",
+			"deleted": "Объявление удалено",
+			"submittedForReview": "Отправлено на модерацию"
+		}
+	},
+	"events": {
+		"title": "События",
+		"empty": "Событий не запланировано",
+		"upcoming": "Предстоящие",
+		"past": "Прошедшие",
+		"organizer": "Организатор",
+		"venue": "Место проведения",
+		"date": "Дата"
+	},
+	"admin": {
+		"title": "Панель администратора",
+		"moderation": "Модерация",
+		"reports": "Жалобы",
+		"users": "Пользователи",
+		"categories": "Категории",
+		"locations": "Локации",
+		"events": "События",
+		"queue": "Очередь",
+		"approve": "Одобрить",
+		"reject": "Отклонить",
+		"rejectReason": "Причина отклонения",
+		"forbidden": "Доступ запрещён"
+	},
+	"errors": {
+		"notFound": "Страница не найдена",
+		"goHome": "На главную",
+		"internal": "Внутренняя ошибка сервера"
+	}
+}
