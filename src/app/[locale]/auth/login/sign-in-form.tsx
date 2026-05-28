@@ -1,29 +1,32 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useFormState, useFormStatus } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import { signInAction } from '../actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+async function formAction(_prev: unknown, formData: FormData) {
+	const res = await signInAction(formData);
+	return res.ok ? null : res.error;
+}
+
+function SubmitButton({ label }: { label: string }) {
+	const { pending } = useFormStatus();
+	return (
+		<Button type="submit" className="w-full" disabled={pending}>
+			{pending ? '…' : label}
+		</Button>
+	);
+}
+
 export function SignInForm() {
 	const t = useTranslations('auth');
-	const [error, setError] = useState<string | null>(null);
-	const [isPending, startTransition] = useTransition();
-
-	function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-		event.preventDefault();
-		setError(null);
-		const formData = new FormData(event.currentTarget);
-		startTransition(async () => {
-			const res = await signInAction(formData);
-			if (!res.ok) setError(res.error);
-		});
-	}
+	const [state, action] = useFormState(formAction, null);
 
 	return (
-		<form onSubmit={onSubmit} className="space-y-4">
+		<form action={action} className="space-y-4">
 			<div className="space-y-2">
 				<Label htmlFor="email">{t('email')}</Label>
 				<Input id="email" name="email" type="email" required autoComplete="email" />
@@ -38,10 +41,8 @@ export function SignInForm() {
 					autoComplete="current-password"
 				/>
 			</div>
-			{error && <p className="text-sm text-destructive">{error}</p>}
-			<Button type="submit" className="w-full" disabled={isPending}>
-				{isPending ? '…' : t('signIn')}
-			</Button>
+			{state && <p className="text-sm text-destructive">{state}</p>}
+			<SubmitButton label={t('signIn')} />
 		</form>
 	);
 }

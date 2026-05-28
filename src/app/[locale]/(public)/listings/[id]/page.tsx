@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { fetchListing } from '@/lib/listings/queries';
 import { photoPublicUrl } from '@/lib/listings/storage';
-import { getCurrentUser } from '@/lib/auth';
+import { getCurrentUser, isModerator } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -12,6 +12,7 @@ import { ContactSellerButton } from '@/components/listings/contact-seller-button
 import { FavoriteButton } from '@/components/listings/favorite-button';
 import { Gallery } from '@/components/listings/gallery';
 import { ViewTracker } from '@/components/listings/view-tracker';
+import { ReportButton } from '@/components/listings/report-button';
 import { formatPrice, formatRelativeDate } from '@/lib/utils';
 import { Eye, MapPin, User as UserIcon } from 'lucide-react';
 
@@ -48,11 +49,16 @@ export default async function ListingDetailPage({ params }: PageProps) {
 	const listing = await fetchListing(id);
 	if (!listing) notFound();
 
+	const user = await getCurrentUser();
+	const canView =
+		listing.status === 'published' ||
+		user?.id === listing.owner_id ||
+		isModerator(user);
+	if (!canView) notFound();
+
 	const t = await getTranslations('listings');
 	const localeTag = locale === 'kk' ? 'kk-KZ' : 'ru-RU';
 	const localeKey = locale === 'kk' ? 'name_kk' : 'name_ru';
-
-	const user = await getCurrentUser();
 	let isFavorite = false;
 	if (user) {
 		const supabase = await createClient();
@@ -77,11 +83,7 @@ export default async function ListingDetailPage({ params }: PageProps) {
 		.sort((a, b) => a.order_index - b.order_index)
 		.map((p) => photoPublicUrl(p.path));
 
-	const seller = listing.profiles
-		? Array.isArray(listing.profiles)
-			? listing.profiles[0]
-			: listing.profiles
-		: null;
+	const seller = listing.profiles as { full_name?: string | null; phone?: string | null } | null;
 	const category = Array.isArray(listing.categories) ? listing.categories[0] : listing.categories;
 	const city = Array.isArray(listing.cities) ? listing.cities[0] : listing.cities;
 	const region = Array.isArray(listing.regions) ? listing.regions[0] : listing.regions;
@@ -90,9 +92,26 @@ export default async function ListingDetailPage({ params }: PageProps) {
 		Boolean,
 	);
 
+	const isOwner = user?.id === listing.owner_id;
+	const showStatusBanner = listing.status !== 'published' && canView;
+
 	return (
 		<div className="container py-6">
 			<ViewTracker listingId={id} />
+
+			{showStatusBanner && (
+				<div
+					className={`mb-4 rounded-lg border px-4 py-3 text-sm font-medium ${
+						listing.status === 'pending'
+							? 'border-yellow-300 bg-yellow-50 text-yellow-800'
+							: listing.status === 'rejected'
+								? 'border-red-300 bg-red-50 text-red-800'
+								: 'border-gray-200 bg-gray-50 text-gray-700'
+					}`}
+				>
+					{t(`statuses.${listing.status}`)}
+				</div>
+			)}
 
 			<nav className="mb-4 text-sm text-muted-foreground">
 				<a href={`/${locale}/listings`} className="hover:underline">
@@ -179,11 +198,17 @@ export default async function ListingDetailPage({ params }: PageProps) {
 							<div className="mt-6 flex flex-col gap-2">
 								<ContactSellerButton
 									ownerId={listing.owner_id}
-									phone={seller?.phone ?? null}
+									phone={(listing.contact_phone as string | null) ?? seller?.phone ?? null}
 									isAuthenticated={!!user}
 								/>
 								<FavoriteButton listingId={id} initial={isFavorite} authenticated={!!user} />
 							</div>
+
+							{user && !isOwner && listing.status === 'published' && (
+								<div className="mt-2">
+									<ReportButton listingId={id} />
+								</div>
+							)}
 						</CardContent>
 					</Card>
 

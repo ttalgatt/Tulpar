@@ -15,8 +15,13 @@ export function ReportActions({ reportId }: { reportId: string }) {
 		startTransition(async () => {
 			const res = await resolveReportAction(reportId, action);
 			if (res.ok) {
-				toast({ title: action });
-				router.refresh();
+				toast({
+					title: action === 'resolved' ? 'Жалоба принята' : 'Жалоба отклонена',
+					description: action === 'resolved'
+						? 'Отметьте объявление как нарушающее правила вручную, если нужно.'
+						: undefined,
+				});
+				window.location.reload();
 			} else toast({ variant: 'destructive', title: res.error });
 		});
 	}
@@ -24,10 +29,10 @@ export function ReportActions({ reportId }: { reportId: string }) {
 	return (
 		<div className="flex gap-2 pt-2">
 			<Button size="sm" onClick={() => handle('resolved')} disabled={isPending}>
-				Принять
+				{isPending ? '…' : 'Принять жалобу'}
 			</Button>
 			<Button size="sm" variant="outline" onClick={() => handle('rejected')} disabled={isPending}>
-				Отклонить
+				{isPending ? '…' : 'Отклонить жалобу'}
 			</Button>
 		</div>
 	);

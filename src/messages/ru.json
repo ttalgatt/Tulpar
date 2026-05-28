@@ -117,7 +117,9 @@
 			"region": "Область",
 			"city": "Город",
 			"district": "Район",
-			"photos": "Фотографии"
+			"photos": "Фотографии",
+			"contactPhone": "Контактный телефон",
+			"contactPhoneHint": "Оставьте пустым, чтобы использовать телефон из профиля"
 		},
 		"dealTypes": {
 			"sale": "Продажа",
@@ -169,7 +171,20 @@
 			"views": "Просмотров: {count}",
 			"addFavorite": "В избранное",
 			"removeFavorite": "Из избранного",
-			"report": "Пожаловаться"
+			"report": "Пожаловаться",
+			"reportTitle": "Жалоба на объявление",
+			"reportSent": "Жалоба отправлена",
+			"reportReason": "Причина",
+			"reportComment": "Комментарий (необязательно)",
+			"reportSubmit": "Отправить",
+			"reportReasons": {
+				"spam": "Спам",
+				"fraud": "Мошенничество",
+				"prohibited": "Запрещённый товар",
+				"wrong_category": "Неверная категория",
+				"duplicate": "Дубликат",
+				"other": "Другое"
+			}
 		},
 		"actions": {
 			"create": "Разместить",
@@ -216,7 +231,21 @@
 		"approve": "Одобрить",
 		"reject": "Отклонить",
 		"rejectReason": "Причина отклонения",
-		"forbidden": "Доступ запрещён"
+		"forbidden": "Доступ запрещён",
+		"reportStatuses": {
+			"open": "Открыта",
+			"in_review": "На рассмотрении",
+			"resolved": "Решена",
+			"rejected": "Отклонена"
+		},
+		"reportTargets": {
+			"listing": "Объявление",
+			"user": "Пользователь",
+			"event": "Событие"
+		},
+		"resolve": "Решена",
+		"rejectReport": "Отклонить",
+		"noReports": "Жалоб нет"
 	},
 	"errors": {
 		"notFound": "Страница не найдена",

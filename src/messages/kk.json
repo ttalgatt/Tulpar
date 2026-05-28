@@ -117,7 +117,9 @@
 			"region": "Облыс",
 			"city": "Қала",
 			"district": "Аудан",
-			"photos": "Фотолар"
+			"photos": "Фотолар",
+			"contactPhone": "Байланыс телефоны",
+			"contactPhoneHint": "Профильдегі телефонды пайдалану үшін бос қалдырыңыз"
 		},
 		"dealTypes": {
 			"sale": "Сату",
@@ -169,7 +171,20 @@
 			"views": "Қаралымдар: {count}",
 			"addFavorite": "Таңдаулыға қосу",
 			"removeFavorite": "Таңдаулыдан алу",
-			"report": "Шағымдану"
+			"report": "Шағымдану",
+			"reportTitle": "Хабарландыруға шағым",
+			"reportSent": "Шағым жіберілді",
+			"reportReason": "Себебі",
+			"reportComment": "Пікір (міндетті емес)",
+			"reportSubmit": "Жіберу",
+			"reportReasons": {
+				"spam": "Спам",
+				"fraud": "Алаяқтық",
+				"prohibited": "Тыйым салынған тауар",
+				"wrong_category": "Қате санат",
+				"duplicate": "Қайталану",
+				"other": "Басқа"
+			}
 		},
 		"actions": {
 			"create": "Орналастыру",
@@ -216,7 +231,21 @@
 		"approve": "Растау",
 		"reject": "Қабылдамау",
 		"rejectReason": "Бас тарту себебі",
-		"forbidden": "Қол жеткізу жоқ"
+		"forbidden": "Қол жеткізу жоқ",
+		"reportStatuses": {
+			"open": "Ашық",
+			"in_review": "Қарастырылуда",
+			"resolved": "Шешілді",
+			"rejected": "Қабылданбады"
+		},
+		"reportTargets": {
+			"listing": "Хабарландыру",
+			"user": "Пайдаланушы",
+			"event": "Іс-шара"
+		},
+		"resolve": "Шешілді",
+		"rejectReport": "Қабылдамау",
+		"noReports": "Шағым жоқ"
 	},
 	"errors": {
 		"notFound": "Бет табылмады",

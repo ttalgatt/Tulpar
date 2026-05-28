@@ -1,5 +1,5 @@
 import { cache } from 'react';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
 import type { ListingFilters } from './schemas';
 
 export interface ListingListItem {
@@ -85,9 +85,13 @@ export const fetchListings = cache(async (filters: ListingFilters): Promise<List
 	};
 });
 
+// Uses service role to bypass RLS — authorization is enforced in the page
+// (status=published OR owner OR moderator). This avoids auth.uid() being NULL
+// in server components when the session cookie hasn't propagated through the
+// RSC render pipeline yet.
 export const fetchListing = cache(async (id: string) => {
-	const supabase = await createClient();
-	const { data } = await supabase
+	const supabase = createServiceRoleClient();
+	const { data, error } = await supabase
 		.from('listings')
 		.select(
 			`*,
@@ -96,12 +100,20 @@ export const fetchListing = cache(async (id: string) => {
 			categories(id, slug, kind, name_ru, name_kk),
 			regions(id, slug, name_ru, name_kk),
 			cities(id, slug, name_ru, name_kk),
-			districts(id, slug, name_ru, name_kk),
-			profiles!listings_owner_id_fkey(id, full_name, phone, avatar_url)`,
+			districts(id, slug, name_ru, name_kk)`,
 		)
 		.eq('id', id)
 		.maybeSingle();
-	return data;
+	if (!data || error) return null;
+
+	// Fetch seller profile separately to avoid PostgREST schema cache FK issues
+	const { data: profile } = await supabase
+		.from('profiles')
+		.select('id, full_name, phone, avatar_url')
+		.eq('id', data.owner_id)
+		.maybeSingle();
+
+	return { ...data, profiles: profile ?? null };
 });
 
 export const fetchCategories = cache(async () => {

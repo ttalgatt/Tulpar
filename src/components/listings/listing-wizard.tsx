@@ -105,6 +105,21 @@ export function ListingWizard({
 	);
 	const [unit, setUnit] = useState<'piece' | 'head' | 'kg' | ''>(initial?.unit ?? '');
 	const [isBulk, setIsBulk] = useState<boolean>(initial?.isBulk ?? false);
+	const [contactPhone, setContactPhone] = useState(initial?.contactPhone ?? '');
+
+	function formatPhone(raw: string): string {
+		// Strip everything except digits and leading +
+		const digits = raw.replace(/\D/g, '');
+		if (!digits) return '';
+		// Kazakhstan/Russia: +7 (XXX) XXX-XX-XX
+		const d = digits.startsWith('7') ? digits : digits.startsWith('8') ? '7' + digits.slice(1) : digits;
+		let out = '+7';
+		if (d.length > 1) out += ' (' + d.slice(1, 4);
+		if (d.length >= 4) out += ') ' + d.slice(4, 7);
+		if (d.length >= 7) out += '-' + d.slice(7, 9);
+		if (d.length >= 9) out += '-' + d.slice(9, 11);
+		return out;
+	}
 	const [regionId, setRegionId] = useState<number | null>(initial?.regionId ?? null);
 	const [cityId, setCityId] = useState<number | null>(initial?.cityId ?? null);
 	const [districtId, setDistrictId] = useState<number | null>(initial?.districtId ?? null);
@@ -190,6 +205,7 @@ export function ListingWizard({
 			unit: unit || null,
 			isBulk,
 			photos: photos.map((p, i) => ({ path: p.path, orderIndex: i })),
+			contactPhone,
 		};
 	}
 
@@ -375,6 +391,20 @@ export function ListingWizard({
 										<span className="text-sm">{t('fields.isBulk')}</span>
 									</label>
 								)}
+							</div>
+
+							<div className="space-y-2">
+								<Label htmlFor="contactPhone">{t('fields.contactPhone')}</Label>
+								<Input
+									id="contactPhone"
+									name="contactPhone"
+									type="tel"
+									value={contactPhone}
+									onChange={(e) => setContactPhone(formatPhone(e.target.value))}
+									placeholder="+7 (___) ___-__-__"
+									maxLength={18}
+								/>
+								<p className="text-xs text-muted-foreground">{t('fields.contactPhoneHint')}</p>
 							</div>
 						</div>
 					)}

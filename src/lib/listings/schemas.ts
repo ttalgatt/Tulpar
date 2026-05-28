@@ -23,6 +23,7 @@ export const listingInputSchema = z
 		quantity: z.coerce.number().int().positive().nullable().optional(),
 		unit: unitSchema.nullable().optional(),
 		isBulk: z.coerce.boolean().default(false),
+		contactPhone: z.string().trim().max(18).optional().default(''),
 		photos: z
 			.array(
 				z.object({

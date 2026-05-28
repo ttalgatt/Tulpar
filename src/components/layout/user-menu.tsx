@@ -2,7 +2,6 @@
 
 import { useTranslations } from 'next-intl';
 import { useTransition } from 'react';
-import { useRouter } from '@/i18n/routing';
 import { Link } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
 import {
@@ -24,15 +23,16 @@ interface Props {
 
 export function UserMenu({ email, isModerator }: Props) {
 	const t = useTranslations('nav');
-	const router = useRouter();
 	const [isPending, startTransition] = useTransition();
 
 	function signOut() {
 		startTransition(async () => {
 			const supabase = createClient();
 			await supabase.auth.signOut();
-			router.refresh();
-			router.push('/');
+			// Hard navigation ensures server components (Header) are re-rendered
+			// without relying on the RSC router cache, which may serve a stale
+			// payload when soft-navigating right after signOut.
+			window.location.href = '/';
 		});
 	}
 

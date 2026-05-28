@@ -1,6 +1,6 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
-import { createClient } from '@/lib/supabase/server';
+import { createServiceRoleClient } from '@/lib/supabase/server';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ModerationActions } from '@/components/admin/moderation-actions';
@@ -17,16 +17,26 @@ export default async function ModerationPage({
 	const { locale } = await params;
 	setRequestLocale(locale);
 	const t = await getTranslations('admin');
-	const supabase = await createClient();
+	const supabase = createServiceRoleClient();
 
 	const { data: items } = await supabase
 		.from('listings')
-		.select(
-			'id, title_ru, title_kk, status, created_at, owner_id, listing_photos(path, order_index), profiles!listings_owner_id_fkey(full_name)',
-		)
+		.select('id, title_ru, title_kk, status, created_at, owner_id, listing_photos(path, order_index)')
 		.eq('status', 'pending')
 		.order('created_at', { ascending: true })
 		.limit(100);
+
+	const ownerIds = [...new Set((items ?? []).map((l) => l.owner_id).filter(Boolean))];
+	const profileMap: Record<string, string | null> = {};
+	if (ownerIds.length > 0) {
+		const { data: profileRows } = await supabase
+			.from('profiles')
+			.select('id, full_name')
+			.in('id', ownerIds);
+		(profileRows ?? []).forEach((p) => {
+			profileMap[p.id] = p.full_name;
+		});
+	}
 
 	const localeTag = locale === 'kk' ? 'kk-KZ' : 'ru-RU';
 
@@ -43,11 +53,7 @@ export default async function ModerationPage({
 						.slice()
 						.sort((a, b) => a.order_index - b.order_index);
 					const cover = photos[0]?.path ? photoPublicUrl(photos[0].path) : null;
-					const profile = l.profiles
-						? Array.isArray(l.profiles)
-							? l.profiles[0]
-							: l.profiles
-						: null;
+					const ownerName = profileMap[l.owner_id] ?? null;
 					return (
 						<Card key={l.id}>
 							<CardContent className="flex items-center gap-4 p-3">
@@ -71,7 +77,7 @@ export default async function ModerationPage({
 									<div className="mt-1 flex items-center gap-2 text-sm">
 										<Badge variant="secondary">pending</Badge>
 										<span className="text-muted-foreground">
-											{profile?.full_name} · {formatRelativeDate(l.created_at, localeTag)}
+											{ownerName} · {formatRelativeDate(l.created_at, localeTag)}
 										</span>
 									</div>
 								</div>
