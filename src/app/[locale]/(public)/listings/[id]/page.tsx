@@ -21,13 +21,12 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-	const { locale, id } = await params;
+	const { id } = await params;
 	const listing = await fetchListing(id);
 	if (!listing) return { title: '404' };
 
-	const title = locale === 'kk' ? listing.title_kk ?? listing.title_ru : listing.title_ru;
-	const description =
-		(locale === 'kk' ? listing.description_kk : listing.description_ru) ?? title ?? '';
+	const title = listing.title ?? '';
+	const description = listing.description ?? title ?? '';
 	const photo = listing.listing_photos?.[0]?.path
 		? photoPublicUrl(listing.listing_photos[0].path)
 		: undefined;
@@ -71,12 +70,8 @@ export default async function ListingDetailPage({ params }: PageProps) {
 		isFavorite = !!data;
 	}
 
-	const title =
-		(locale === 'kk' ? listing.title_kk : listing.title_ru) ||
-		listing.title_ru ||
-		listing.title_kk ||
-		'—';
-	const description = locale === 'kk' ? listing.description_kk : listing.description_ru;
+	const title = listing.title || '—';
+	const description = listing.description;
 
 	const photos = ((listing.listing_photos ?? []) as Array<{ path: string; order_index: number }>)
 		.slice()

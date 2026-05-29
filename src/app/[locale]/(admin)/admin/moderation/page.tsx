@@ -21,7 +21,7 @@ export default async function ModerationPage({
 
 	const { data: items } = await supabase
 		.from('listings')
-		.select('id, title_ru, title_kk, status, created_at, owner_id, listing_photos(path, order_index)')
+		.select('id, title, status, created_at, owner_id, listing_photos(path, order_index)')
 		.eq('status', 'pending')
 		.order('created_at', { ascending: true })
 		.limit(100);
@@ -47,8 +47,7 @@ export default async function ModerationPage({
 			</h2>
 			<div className="space-y-3">
 				{(items ?? []).map((l) => {
-					const title =
-						(locale === 'kk' ? l.title_kk : l.title_ru) || l.title_ru || l.title_kk || '—';
+					const title = l.title || '—';
 					const photos = (l.listing_photos ?? [])
 						.slice()
 						.sort((a, b) => a.order_index - b.order_index);

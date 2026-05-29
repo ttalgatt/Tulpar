@@ -23,7 +23,7 @@ export default async function EventsPage({
 	const now = new Date().toISOString();
 	let query = supabase
 		.from('events')
-		.select('id, title_ru, title_kk, starts_at, ends_at, city_id, cover_path, organizer, address, cities(name_ru, name_kk)')
+		.select('id, title, starts_at, ends_at, city_id, cover_path, organizer, address, cities(name_ru, name_kk)')
 		.eq('status', 'published');
 
 	if (filter === 'past') {
@@ -66,8 +66,7 @@ export default async function EventsPage({
 			) : (
 				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 					{data.map((e) => {
-						const title =
-							(locale === 'kk' ? e.title_kk : e.title_ru) || e.title_ru || e.title_kk || '—';
+						const title = e.title || '—';
 						const cover = e.cover_path ? eventCoverUrl(e.cover_path) : null;
 						const city = e.cities
 							? Array.isArray(e.cities)

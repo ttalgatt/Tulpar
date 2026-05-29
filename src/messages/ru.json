@@ -104,10 +104,8 @@
 		},
 		"fields": {
 			"category": "Категория",
-			"titleRu": "Заголовок (русский)",
-			"titleKk": "Заголовок (қазақша)",
-			"descriptionRu": "Описание (русский)",
-			"descriptionKk": "Описание (қазақша)",
+			"title": "Заголовок",
+			"description": "Описание",
 			"price": "Цена",
 			"currency": "Валюта",
 			"dealType": "Тип сделки",

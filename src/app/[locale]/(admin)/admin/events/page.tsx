@@ -36,8 +36,7 @@ export default async function AdminEventsPage({
 				<h2 className="mb-4 text-xl font-semibold">{t('events')}</h2>
 				<div className="space-y-2">
 					{(events ?? []).map((e) => {
-						const title =
-							(locale === 'kk' ? e.title_kk : e.title_ru) || e.title_ru || '—';
+						const title = e.title || '—';
 						return (
 							<Card key={e.id}>
 								<CardContent className="flex items-center justify-between gap-4 p-3">

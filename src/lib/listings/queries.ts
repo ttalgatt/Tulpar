@@ -4,8 +4,7 @@ import type { ListingFilters } from './schemas';
 
 export interface ListingListItem {
 	id: string;
-	title_ru: string | null;
-	title_kk: string | null;
+	title: string | null;
 	price: number | null;
 	currency: string;
 	deal_type: 'sale' | 'gift' | 'exchange';
@@ -33,15 +32,14 @@ export const fetchListings = cache(async (filters: ListingFilters): Promise<List
 	let query = supabase
 		.from('listings')
 		.select(
-			'id, title_ru, title_kk, price, currency, deal_type, is_bulk, quantity, unit, created_at, status, listing_photos(path, order_index)',
+			'id, title, price, currency, deal_type, is_bulk, quantity, unit, created_at, status, listing_photos(path, order_index)',
 			{ count: 'exact' },
 		)
 		.eq('status', 'published');
 
 	if (filters.q) {
-		// pg_trgm fallback по конкатенации заголовков
 		query = query.or(
-			`title_ru.ilike.%${filters.q}%,title_kk.ilike.%${filters.q}%,description_ru.ilike.%${filters.q}%,description_kk.ilike.%${filters.q}%`,
+			`title.ilike.%${filters.q}%,description.ilike.%${filters.q}%`,
 		);
 	}
 

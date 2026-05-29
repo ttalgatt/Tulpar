@@ -10,10 +10,8 @@ export const listingInputSchema = z
 		regionId: z.coerce.number().int().positive().nullable().optional(),
 		cityId: z.coerce.number().int().positive().nullable().optional(),
 		districtId: z.coerce.number().int().positive().nullable().optional(),
-		titleRu: z.string().trim().max(200).optional().default(''),
-		titleKk: z.string().trim().max(200).optional().default(''),
-		descriptionRu: z.string().trim().max(5000).optional().default(''),
-		descriptionKk: z.string().trim().max(5000).optional().default(''),
+		title: z.string().trim().min(1, 'Заголовок обязателен').max(200),
+		description: z.string().trim().max(5000).optional().default(''),
 		price: z
 			.union([z.coerce.number().nonnegative().max(1e10), z.literal('').transform(() => null)])
 			.nullable()
@@ -33,11 +31,7 @@ export const listingInputSchema = z
 			)
 			.max(20)
 			.default([]),
-	})
-	.refine(
-		(v) => (v.titleRu && v.titleRu.length > 0) || (v.titleKk && v.titleKk.length > 0),
-		{ message: 'Заголовок обязателен хотя бы на одном языке', path: ['titleRu'] },
-	);
+	});
 
 export type ListingInput = z.infer<typeof listingInputSchema>;
 

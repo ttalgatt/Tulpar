@@ -104,10 +104,8 @@
 		},
 		"fields": {
 			"category": "Санат",
-			"titleRu": "Тақырып (орысша)",
-			"titleKk": "Тақырып (қазақша)",
-			"descriptionRu": "Сипаттама (орысша)",
-			"descriptionKk": "Сипаттама (қазақша)",
+			"title": "Тақырып",
+			"description": "Сипаттама",
 			"price": "Бағасы",
 			"currency": "Валюта",
 			"dealType": "Мәміле түрі",

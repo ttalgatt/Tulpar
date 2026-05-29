@@ -26,7 +26,7 @@ export default async function MyListingsPage({
 	const { data: listings } = await supabase
 		.from('listings')
 		.select(
-			'id, title_ru, title_kk, price, currency, status, created_at, listing_photos(path, order_index)',
+			'id, title, price, currency, status, created_at, listing_photos(path, order_index)',
 		)
 		.eq('owner_id', user!.id)
 		.order('created_at', { ascending: false });
@@ -59,8 +59,7 @@ export default async function MyListingsPage({
 					{listings.map((l) => {
 						const photos = (l.listing_photos ?? []).slice().sort((a, b) => a.order_index - b.order_index);
 						const cover = photos[0]?.path ? photoPublicUrl(photos[0].path) : null;
-						const title =
-							(locale === 'kk' ? l.title_kk : l.title_ru) || l.title_ru || l.title_kk || '—';
+						const title = l.title || '—';
 						return (
 							<Card key={l.id}>
 								<CardContent className="flex items-center gap-4 p-3">

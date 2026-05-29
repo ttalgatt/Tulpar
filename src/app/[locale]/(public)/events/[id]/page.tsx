@@ -12,17 +12,16 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-	const { locale, id } = await params;
+	const { id } = await params;
 	const supabase = await createClient();
 	const { data: event } = await supabase
 		.from('events')
-		.select('title_ru, title_kk, description_ru, description_kk, cover_path')
+		.select('title, description, cover_path')
 		.eq('id', id)
 		.maybeSingle();
 	if (!event) return { title: '404' };
-	const title = locale === 'kk' ? event.title_kk ?? event.title_ru : event.title_ru;
-	const description =
-		(locale === 'kk' ? event.description_kk : event.description_ru) ?? '';
+	const title = event.title;
+	const description = event.description ?? '';
 	const image = event.cover_path ? eventCoverUrl(event.cover_path) : undefined;
 	return {
 		title: title ?? 'Event',
@@ -51,8 +50,8 @@ export default async function EventDetailPage({ params }: PageProps) {
 
 	const localeTag = locale === 'kk' ? 'kk-KZ' : 'ru-RU';
 	const localeKey = locale === 'kk' ? 'name_kk' : 'name_ru';
-	const title = (locale === 'kk' ? event.title_kk : event.title_ru) || event.title_ru || '—';
-	const description = locale === 'kk' ? event.description_kk : event.description_ru;
+	const title = event.title || '—';
+	const description = event.description;
 	const cover = event.cover_path ? eventCoverUrl(event.cover_path) : null;
 	const city = event.cities
 		? Array.isArray(event.cities)

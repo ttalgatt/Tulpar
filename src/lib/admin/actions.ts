@@ -79,10 +79,8 @@ export async function resolveReportAction(
 }
 
 const eventSchema = z.object({
-	titleRu: z.string().min(1).max(200),
-	titleKk: z.string().max(200).optional().default(''),
-	descriptionRu: z.string().max(5000).optional().default(''),
-	descriptionKk: z.string().max(5000).optional().default(''),
+	title: z.string().min(1).max(200),
+	description: z.string().max(5000).optional().default(''),
 	startsAt: z.string().min(1),
 	endsAt: z.string().optional().default(''),
 	cityId: z.coerce.number().int().positive().optional().nullable(),
@@ -111,10 +109,8 @@ export async function createEventAction(input: EventInput): Promise<AdminResult 
 	const { data: row, error } = await supabase
 		.from('events')
 		.insert({
-			title_ru: data.titleRu,
-			title_kk: data.titleKk || null,
-			description_ru: data.descriptionRu || null,
-			description_kk: data.descriptionKk || null,
+			title: data.title,
+			description: data.description || null,
 			starts_at: data.startsAt,
 			ends_at: data.endsAt || null,
 			city_id: data.cityId ?? null,

@@ -126,15 +126,13 @@ export type Database = {
           cover_path: string | null
           created_at: string
           created_by: string | null
-          description_kk: string | null
-          description_ru: string | null
+          description: string | null
           ends_at: string | null
           id: string
           organizer: string | null
           starts_at: string
           status: Database["public"]["Enums"]["event_status"]
-          title_kk: string | null
-          title_ru: string
+          title: string
         }
         Insert: {
           address?: string | null
@@ -142,15 +140,13 @@ export type Database = {
           cover_path?: string | null
           created_at?: string
           created_by?: string | null
-          description_kk?: string | null
-          description_ru?: string | null
+          description?: string | null
           ends_at?: string | null
           id?: string
           organizer?: string | null
           starts_at: string
           status?: Database["public"]["Enums"]["event_status"]
-          title_kk?: string | null
-          title_ru: string
+          title: string
         }
         Update: {
           address?: string | null
@@ -158,15 +154,13 @@ export type Database = {
           cover_path?: string | null
           created_at?: string
           created_by?: string | null
-          description_kk?: string | null
-          description_ru?: string | null
+          description?: string | null
           ends_at?: string | null
           id?: string
           organizer?: string | null
           starts_at?: string
           status?: Database["public"]["Enums"]["event_status"]
-          title_kk?: string | null
-          title_ru?: string
+          title?: string
         }
         Relationships: [
           {
@@ -275,8 +269,7 @@ export type Database = {
           created_at: string
           currency: string
           deal_type: Database["public"]["Enums"]["listing_deal_type"]
-          description_kk: string | null
-          description_ru: string | null
+          description: string | null
           district_id: number | null
           expires_at: string | null
           id: string
@@ -290,8 +283,7 @@ export type Database = {
           rejection_reason: string | null
           search_tsv: unknown
           status: Database["public"]["Enums"]["listing_status"]
-          title_kk: string | null
-          title_ru: string | null
+          title: string | null
           unit: Database["public"]["Enums"]["listing_unit"] | null
           updated_at: string
           views_count: number
@@ -302,8 +294,7 @@ export type Database = {
           created_at?: string
           currency?: string
           deal_type?: Database["public"]["Enums"]["listing_deal_type"]
-          description_kk?: string | null
-          description_ru?: string | null
+          description?: string | null
           district_id?: number | null
           expires_at?: string | null
           id?: string
@@ -317,8 +308,7 @@ export type Database = {
           rejection_reason?: string | null
           search_tsv?: unknown
           status?: Database["public"]["Enums"]["listing_status"]
-          title_kk?: string | null
-          title_ru?: string | null
+          title?: string | null
           unit?: Database["public"]["Enums"]["listing_unit"] | null
           updated_at?: string
           views_count?: number
@@ -329,8 +319,7 @@ export type Database = {
           created_at?: string
           currency?: string
           deal_type?: Database["public"]["Enums"]["listing_deal_type"]
-          description_kk?: string | null
-          description_ru?: string | null
+          description?: string | null
           district_id?: number | null
           expires_at?: string | null
           id?: string
@@ -344,8 +333,7 @@ export type Database = {
           rejection_reason?: string | null
           search_tsv?: unknown
           status?: Database["public"]["Enums"]["listing_status"]
-          title_kk?: string | null
-          title_ru?: string | null
+          title?: string | null
           unit?: Database["public"]["Enums"]["listing_unit"] | null
           updated_at?: string
           views_count?: number

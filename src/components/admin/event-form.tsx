@@ -53,10 +53,8 @@ export function EventForm({
 		const formData = new FormData(form);
 		startTransition(async () => {
 			const res = await createEventAction({
-				titleRu: String(formData.get('titleRu') ?? ''),
-				titleKk: String(formData.get('titleKk') ?? ''),
-				descriptionRu: String(formData.get('descriptionRu') ?? ''),
-				descriptionKk: String(formData.get('descriptionKk') ?? ''),
+				title: String(formData.get('title') ?? ''),
+				description: String(formData.get('description') ?? ''),
 				startsAt: String(formData.get('startsAt') ?? ''),
 				endsAt: String(formData.get('endsAt') ?? ''),
 				cityId: cityId ? Number(cityId) : null,
@@ -77,21 +75,13 @@ export function EventForm({
 	return (
 		<form onSubmit={onSubmit} className="space-y-4">
 			<div className="grid gap-4 sm:grid-cols-2">
-				<div className="space-y-2">
-					<Label htmlFor="titleRu">Название (RU) *</Label>
-					<Input id="titleRu" name="titleRu" required />
-				</div>
-				<div className="space-y-2">
-					<Label htmlFor="titleKk">Атауы (KK)</Label>
-					<Input id="titleKk" name="titleKk" />
+				<div className="space-y-2 sm:col-span-2">
+					<Label htmlFor="title">Название *</Label>
+					<Input id="title" name="title" required />
 				</div>
 				<div className="space-y-2 sm:col-span-2">
-					<Label htmlFor="descriptionRu">Описание (RU)</Label>
-					<Textarea id="descriptionRu" name="descriptionRu" rows={3} />
-				</div>
-				<div className="space-y-2 sm:col-span-2">
-					<Label htmlFor="descriptionKk">Сипаттама (KK)</Label>
-					<Textarea id="descriptionKk" name="descriptionKk" rows={3} />
+					<Label htmlFor="description">Описание</Label>
+					<Textarea id="description" name="description" rows={3} />
 				</div>
 				<div className="space-y-2">
 					<Label htmlFor="startsAt">Начало *</Label>

@@ -16,11 +16,7 @@ interface Props {
 
 export async function ListingCard({ listing, locale, className }: Props) {
 	const t = await getTranslations('listings');
-	const title =
-		(locale === 'kk' ? listing.title_kk : listing.title_ru) ||
-		listing.title_ru ||
-		listing.title_kk ||
-		'—';
+	const title = listing.title || '—';
 	const photos = (listing.listing_photos ?? []).slice().sort((a, b) => a.order_index - b.order_index);
 	const cover = photos[0]?.path ? photoPublicUrl(photos[0].path) : null;
 	const localeTag = locale === 'kk' ? 'kk-KZ' : 'ru-RU';

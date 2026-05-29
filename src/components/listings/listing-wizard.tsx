@@ -15,7 +15,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { createClient } from '@/lib/supabase/client';
 import { createListingAction, updateListingAction } from '@/lib/listings/actions';
@@ -92,10 +91,8 @@ export function ListingWizard({
 	const [error, setError] = useState<string | null>(null);
 
 	const [categoryId, setCategoryId] = useState<number | null>(initial?.categoryId ?? null);
-	const [titleRu, setTitleRu] = useState(initial?.titleRu ?? '');
-	const [titleKk, setTitleKk] = useState(initial?.titleKk ?? '');
-	const [descRu, setDescRu] = useState(initial?.descriptionRu ?? '');
-	const [descKk, setDescKk] = useState(initial?.descriptionKk ?? '');
+	const [title, setTitle] = useState(initial?.title ?? '');
+	const [description, setDescription] = useState(initial?.description ?? '');
 	const [price, setPrice] = useState<string>(initial?.price ? String(initial.price) : '');
 	const [dealType, setDealType] = useState<'sale' | 'gift' | 'exchange'>(
 		initial?.dealType ?? 'sale',
@@ -194,10 +191,8 @@ export function ListingWizard({
 			regionId,
 			cityId,
 			districtId,
-			titleRu,
-			titleKk,
-			descriptionRu: descRu,
-			descriptionKk: descKk,
+			title,
+			description,
 			price: price ? Number(price) : null,
 			currency: 'KZT',
 			dealType,
@@ -211,7 +206,7 @@ export function ListingWizard({
 
 	function canGoNext(): boolean {
 		if (STEPS[step] === 'category') return !!categoryId;
-		if (STEPS[step] === 'details') return !!(titleRu.trim() || titleKk.trim());
+		if (STEPS[step] === 'details') return !!title.trim();
 		return true;
 	}
 
@@ -242,6 +237,21 @@ export function ListingWizard({
 
 	const localeKey = locale === 'kk' ? 'name_kk' : 'name_ru';
 
+	const kindOrder: Array<Category['kind']> = ['pets', 'livestock', 'goods', 'services'];
+	const kindLabels: Record<string, { ru: string; kk: string }> = {
+		pets: { ru: 'Домашние животные', kk: 'Үй жануарлары' },
+		livestock: { ru: 'Домашний скот', kk: 'Мал' },
+		goods: { ru: 'Товары', kk: 'Тауарлар' },
+		services: { ru: 'Услуги', kk: 'Қызметтер' },
+	};
+	const groupedCategories = kindOrder
+		.map((kind) => ({
+			kind,
+			label: locale === 'kk' ? kindLabels[kind].kk : kindLabels[kind].ru,
+			items: categories.filter((c) => c.kind === kind),
+		}))
+		.filter((group) => group.items.length > 0);
+
 	return (
 		<div className="space-y-6">
 			<Steps current={step} />
@@ -249,77 +259,54 @@ export function ListingWizard({
 			<Card>
 				<CardContent className="p-6">
 					{STEPS[step] === 'category' && (
-						<div className="space-y-4">
+						<div className="space-y-6">
 							<Label>{t('fields.category')}</Label>
-							<div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
-								{categories.map((c) => (
-									<button
-										key={c.id}
-										type="button"
-										onClick={() => setCategoryId(c.id)}
-										className={cn(
-											'rounded-md border px-3 py-3 text-left text-sm transition hover:border-primary hover:bg-accent/50',
-											categoryId === c.id && 'border-primary bg-primary/10 font-medium',
-										)}
-									>
-										<div className="text-xs uppercase text-muted-foreground">{c.kind}</div>
-										<div>{c[localeKey]}</div>
-									</button>
-								))}
-							</div>
+							{groupedCategories.map((group) => (
+								<div key={group.kind} className="space-y-2">
+									<h3 className="text-sm font-semibold text-muted-foreground">
+										{group.label}
+									</h3>
+									<div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
+										{group.items.map((c) => (
+											<button
+												key={c.id}
+												type="button"
+												onClick={() => setCategoryId(c.id)}
+												className={cn(
+													'rounded-md border px-3 py-3 text-left text-sm transition hover:border-primary hover:bg-accent/50',
+													categoryId === c.id && 'border-primary bg-primary/10 font-medium',
+												)}
+											>
+												{c[localeKey]}
+											</button>
+										))}
+									</div>
+								</div>
+							))}
 						</div>
 					)}
 
 					{STEPS[step] === 'details' && (
 						<div className="space-y-6">
-							<Tabs defaultValue="ru">
-								<TabsList>
-									<TabsTrigger value="ru">Русский</TabsTrigger>
-									<TabsTrigger value="kk">Қазақша</TabsTrigger>
-								</TabsList>
-								<TabsContent value="ru" className="space-y-4">
-									<div className="space-y-2">
-										<Label htmlFor="titleRu">{t('fields.titleRu')}</Label>
-										<Input
-											id="titleRu"
-											value={titleRu}
-											onChange={(e) => setTitleRu(e.target.value)}
-											maxLength={200}
-										/>
-									</div>
-									<div className="space-y-2">
-										<Label htmlFor="descRu">{t('fields.descriptionRu')}</Label>
-										<Textarea
-											id="descRu"
-											value={descRu}
-											onChange={(e) => setDescRu(e.target.value)}
-											rows={6}
-											maxLength={5000}
-										/>
-									</div>
-								</TabsContent>
-								<TabsContent value="kk" className="space-y-4">
-									<div className="space-y-2">
-										<Label htmlFor="titleKk">{t('fields.titleKk')}</Label>
-										<Input
-											id="titleKk"
-											value={titleKk}
-											onChange={(e) => setTitleKk(e.target.value)}
-											maxLength={200}
-										/>
-									</div>
-									<div className="space-y-2">
-										<Label htmlFor="descKk">{t('fields.descriptionKk')}</Label>
-										<Textarea
-											id="descKk"
-											value={descKk}
-											onChange={(e) => setDescKk(e.target.value)}
-											rows={6}
-											maxLength={5000}
-										/>
-									</div>
-								</TabsContent>
-							</Tabs>
+							<div className="space-y-2">
+								<Label htmlFor="title">{t('fields.title')}</Label>
+								<Input
+									id="title"
+									value={title}
+									onChange={(e) => setTitle(e.target.value)}
+									maxLength={200}
+								/>
+							</div>
+							<div className="space-y-2">
+								<Label htmlFor="description">{t('fields.description')}</Label>
+								<Textarea
+									id="description"
+									value={description}
+									onChange={(e) => setDescription(e.target.value)}
+									rows={6}
+									maxLength={5000}
+								/>
+							</div>
 
 							<div className="grid gap-4 sm:grid-cols-2">
 								<div className="space-y-2">
@@ -535,8 +522,7 @@ export function ListingWizard({
 							<Row label={t('fields.category')}>
 								{selectedCategory ? selectedCategory[localeKey] : '—'}
 							</Row>
-							<Row label={t('fields.titleRu')}>{titleRu || '—'}</Row>
-							<Row label={t('fields.titleKk')}>{titleKk || '—'}</Row>
+							<Row label={t('fields.title')}>{title || '—'}</Row>
 							<Row label={t('fields.dealType')}>{t(`dealTypes.${dealType}`)}</Row>
 							{price && <Row label={t('fields.price')}>{price} KZT</Row>}
 							{quantity && (

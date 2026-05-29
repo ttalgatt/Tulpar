@@ -45,11 +45,10 @@ export default async function ReportsPage({
 	if (listingIds.length > 0) {
 		const { data: listings } = await supabase
 			.from('listings')
-			.select('id, title_ru, title_kk')
+			.select('id, title')
 			.in('id', listingIds);
 		(listings ?? []).forEach((l) => {
-			listingTitleMap[l.id] =
-				(locale === 'kk' ? l.title_kk : l.title_ru) || l.title_ru || l.title_kk || l.id;
+			listingTitleMap[l.id] = l.title || l.id;
 		});
 	}
 
