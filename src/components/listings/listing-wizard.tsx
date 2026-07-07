@@ -252,7 +252,7 @@ export function ListingWizard({
 
 	const localeKey = locale === 'kk' ? 'name_kk' : 'name_ru';
 
-	const kindOrder: Array<Category['kind']> = ['pets', 'livestock', 'goods', 'services'];
+	const kindOrder: Array<Category['kind']> = ['livestock', 'pets', 'goods', 'services'];
 	const kindLabels: Record<string, { ru: string; kk: string }> = {
 		pets: { ru: 'Домашние животные', kk: 'Үй жануарлары' },
 		livestock: { ru: 'Домашний скот', kk: 'Мал' },
