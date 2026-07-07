@@ -12,8 +12,8 @@ export async function Footer() {
 			<div className="container py-10 grid gap-8 sm:grid-cols-2 md:grid-cols-4">
 				<div>
 					<div className="flex items-center gap-2 font-bold text-lg mb-2">
-						<Image src="/logo.png" alt="Tulpar" width={28} height={28} className="h-7 w-7" />
-						<span>Tulpar</span>
+				<Image src="/logo.png" alt="Бұзау" width={28} height={28} className="h-7 w-7" />
+					<span>Бұзау</span>
 					</div>
 					<p className="text-sm text-muted-foreground">{tCommon('tagline')}</p>
 				</div>

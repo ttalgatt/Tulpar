@@ -1,6 +1,6 @@
 {
 	"common": {
-		"appName": "Tulpar",
+		"appName": "Бұзау",
 		"tagline": "От телёнка до котёнка",
 		"loading": "Загрузка...",
 		"save": "Сохранить",
@@ -44,7 +44,7 @@
 		"terms": "Условия использования",
 		"privacy": "Конфиденциальность",
 		"contacts": "Контакты",
-		"copyright": "© {year} Tulpar. Все права защищены."
+		"copyright": "© {year} Бұзау. Все права защищены."
 	},
 	"home": {
 		"heroTitle": "Найдите верного друга или хозяйство мечты",
@@ -58,7 +58,7 @@
 		"viewAll": "Смотреть все"
 	},
 	"auth": {
-		"signInTitle": "Вход в Tulpar",
+		"signInTitle": "Вход в Бұзау",
 		"signInSubtitle": "Введите email и пароль",
 		"signUpTitle": "Регистрация",
 		"signUpSubtitle": "Создайте аккаунт, чтобы размещать объявления",

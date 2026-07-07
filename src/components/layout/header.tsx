@@ -15,15 +15,15 @@ export async function Header() {
 		<header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
 			<div className="container flex h-16 items-center gap-4">
 				<Link href="/" className="flex items-center gap-2 text-lg font-bold">
-					<Image
-						src="/logo.png"
-						alt="Tulpar"
-						width={36}
-						height={36}
-						priority
-						className="h-9 w-9"
-					/>
-					<span>Tulpar</span>
+				<Image
+					src="/logo.png"
+					alt="Бұзау"
+					width={36}
+					height={36}
+					priority
+					className="h-9 w-9"
+				/>
+				<span>Бұзау</span>
 				</Link>
 
 				<nav className="ml-6 hidden items-center gap-1 text-sm font-medium md:flex">
