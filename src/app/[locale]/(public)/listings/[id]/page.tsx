@@ -186,7 +186,7 @@ export default async function ListingDetailPage({ params }: PageProps) {
 								)}
 								{listing.is_bulk && <Badge variant="secondary">{t('card.bulk')}</Badge>}
 							</div>
-							<div className="mt-4 text-3xl font-bold text-primary">
+							<div className="mt-4 text-3xl font-bold">
 								{listing.deal_type === 'gift'
 									? t('card.gift')
 									: formatPrice(listing.price, listing.currency, localeTag) ?? '—'}

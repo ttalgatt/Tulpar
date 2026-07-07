@@ -40,7 +40,7 @@ export default async function HomePage({
 
 	return (
 		<div>
-			<section className="border-b bg-gradient-to-br from-primary/10 via-background to-accent/10">
+			<section className="border-b bg-gradient-to-br from-muted/60 via-background to-accent/10">
 				<div className="container py-6 md:py-8">
 					<HomeSearch categories={categories} regions={regions} locale={locale} />
 				</div>
@@ -82,7 +82,7 @@ export default async function HomePage({
 						{events.map((e) => (
 							<Card key={e.id}>
 								<CardContent className="p-4">
-									<Calendar className="mb-2 h-5 w-5 text-primary" />
+									<Calendar className="mb-2 h-5 w-5 text-muted-foreground" />
 									<div className="font-semibold">{e.title}</div>
 									<div className="mt-1 text-sm text-muted-foreground">
 										{new Intl.DateTimeFormat(locale === 'kk' ? 'kk-KZ' : 'ru-RU', {

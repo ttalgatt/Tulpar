@@ -61,12 +61,16 @@ export async function Header() {
 
 			<div className="ml-auto flex items-center gap-2">
 				<LocaleSwitcher />
-				<Button asChild size="sm">
-					<Link href={user ? '/listings/new' : '/auth/register'}>
-						<Plus className="mr-1 h-4 w-4" />
-						{t('createListing')}
-					</Link>
-				</Button>
+			<Button
+				asChild
+				size="sm"
+				className="bg-[hsl(158,64%,32%)] text-white hover:bg-[hsl(158,64%,26%)] focus-visible:ring-[hsl(158,64%,32%)]"
+			>
+				<Link href={user ? '/listings/new' : '/auth/register'}>
+					<Plus className="mr-1 h-4 w-4" />
+					{t('createListing')}
+				</Link>
+			</Button>
 				{user ? (
 					<UserMenu
 						email={user.email ?? ''}

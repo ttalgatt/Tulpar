@@ -58,7 +58,7 @@ export async function ListingCard({ listing, locale, className, priority = false
 				</div>
 				<div className="p-3">
 					<div className="line-clamp-2 min-h-[2.5rem] text-sm font-medium">{title}</div>
-					<div className="mt-1 text-base font-semibold text-primary">
+					<div className="mt-1 text-base font-bold">
 						{listing.deal_type === 'gift'
 							? t('card.gift')
 							: formatPrice(listing.price, listing.currency, localeTag) ?? '—'}
