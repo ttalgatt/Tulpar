@@ -8,6 +8,8 @@ import { HomeSearch } from '@/components/listings/home-search';
 import { fetchCategories, fetchRegions } from '@/lib/listings/queries';
 import { ArrowRight, PawPrint, Calendar } from 'lucide-react';
 
+export const revalidate = 60;
+
 export default async function HomePage({
 	params,
 }: {
@@ -55,10 +57,10 @@ export default async function HomePage({
 					</Button>
 				</div>
 				{recentListings && recentListings.length > 0 ? (
-					<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-						{recentListings.map((l) => (
-							<ListingCard key={l.id} listing={l} locale={locale} />
-						))}
+				<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+					{recentListings.map((l, i) => (
+						<ListingCard key={l.id} listing={l} locale={locale} priority={i < 6} />
+					))}
 					</div>
 				) : (
 					<EmptyState />

@@ -12,9 +12,10 @@ interface Props {
 	listing: ListingListItem;
 	locale: string;
 	className?: string;
+	priority?: boolean;
 }
 
-export async function ListingCard({ listing, locale, className }: Props) {
+export async function ListingCard({ listing, locale, className, priority = false }: Props) {
 	const t = await getTranslations('listings');
 	const title = listing.title || '—';
 	const photos = (listing.listing_photos ?? []).slice().sort((a, b) => a.order_index - b.order_index);
@@ -31,13 +32,14 @@ export async function ListingCard({ listing, locale, className }: Props) {
 			>
 				<div className="relative aspect-square w-full bg-muted">
 					{cover ? (
-						<Image
-							src={cover}
-							alt={title}
-							fill
-							sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-							className="object-cover transition-transform group-hover:scale-105"
-						/>
+					<Image
+						src={cover}
+						alt={title}
+						fill
+						sizes="(min-width: 1280px) 17vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 50vw"
+						className="object-cover transition-transform group-hover:scale-105"
+						priority={priority}
+					/>
 					) : (
 						<div className="flex h-full items-center justify-center text-muted-foreground">
 							<ImageIcon className="h-12 w-12 opacity-30" />
