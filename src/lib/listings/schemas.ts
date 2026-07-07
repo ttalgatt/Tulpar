@@ -21,6 +21,7 @@ export const listingInputSchema = z
 		quantity: z.coerce.number().int().positive().nullable().optional(),
 		unit: unitSchema.nullable().optional(),
 		isBulk: z.coerce.boolean().default(false),
+		ageMonths: z.coerce.number().int().nonnegative().nullable().optional(),
 		contactPhone: z.string().trim().max(18).optional().default(''),
 		photos: z
 			.array(
@@ -44,6 +45,8 @@ export const listingFiltersSchema = z.object({
 	districtId: z.coerce.number().int().positive().optional(),
 	priceMin: z.coerce.number().nonnegative().optional(),
 	priceMax: z.coerce.number().nonnegative().optional(),
+	ageMin: z.coerce.number().int().nonnegative().optional(),
+	ageMax: z.coerce.number().int().nonnegative().optional(),
 	dealType: dealTypeSchema.optional(),
 	withPhoto: z.coerce.boolean().optional(),
 	sort: z.enum(['newest', 'priceAsc', 'priceDesc']).default('newest'),

@@ -11,6 +11,7 @@ export interface ListingListItem {
 	is_bulk: boolean;
 	quantity: number | null;
 	unit: 'piece' | 'head' | 'kg' | null;
+	age_months: number | null;
 	created_at: string;
 	status: string;
 	listing_photos: { path: string; order_index: number }[] | null;
@@ -32,7 +33,7 @@ export const fetchListings = cache(async (filters: ListingFilters): Promise<List
 	let query = supabase
 		.from('listings')
 		.select(
-			'id, title, price, currency, deal_type, is_bulk, quantity, unit, created_at, status, listing_photos(path, order_index)',
+			'id, title, price, currency, deal_type, is_bulk, quantity, unit, age_months, created_at, status, listing_photos(path, order_index)',
 			{ count: 'exact' },
 		)
 		.eq('status', 'published');
@@ -50,6 +51,8 @@ export const fetchListings = cache(async (filters: ListingFilters): Promise<List
 	if (filters.dealType) query = query.eq('deal_type', filters.dealType);
 	if (filters.priceMin !== undefined) query = query.gte('price', filters.priceMin);
 	if (filters.priceMax !== undefined) query = query.lte('price', filters.priceMax);
+	if (filters.ageMin !== undefined) query = query.gte('age_months', filters.ageMin);
+	if (filters.ageMax !== undefined) query = query.lte('age_months', filters.ageMax);
 
 	if (filters.kind) {
 		const { data: catIds } = await supabase

@@ -37,6 +37,37 @@ export function formatRelativeDate(date: string | Date, locale = 'ru-RU') {
 	return formatDate(d, locale);
 }
 
+/**
+ * Форматирует возраст из месяцев в читаемую строку.
+ * Примеры: 1 → "1 мес.", 14 → "1 год 2 мес.", 24 → "2 года", 60 → "5 лет"
+ */
+export function formatAge(months: number, locale = 'ru'): string {
+	if (months < 0) return '';
+	const years = Math.floor(months / 12);
+	const remainMonths = months % 12;
+
+	if (locale === 'kk') {
+		const parts: string[] = [];
+		if (years > 0) parts.push(`${years} жыл`);
+		if (remainMonths > 0) parts.push(`${remainMonths} ай`);
+		return parts.join(' ') || '0 ай';
+	}
+
+	// ru locale — plurals
+	function pluralRu(n: number, one: string, few: string, many: string): string {
+		const mod10 = n % 10;
+		const mod100 = n % 100;
+		if (mod10 === 1 && mod100 !== 11) return `${n} ${one}`;
+		if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return `${n} ${few}`;
+		return `${n} ${many}`;
+	}
+
+	const parts: string[] = [];
+	if (years > 0) parts.push(pluralRu(years, 'год', 'года', 'лет'));
+	if (remainMonths > 0) parts.push(pluralRu(remainMonths, 'мес.', 'мес.', 'мес.'));
+	return parts.join(' ') || '0 мес.';
+}
+
 export function slugify(input: string) {
 	const map: Record<string, string> = {
 		а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'e', ж: 'zh', з: 'z',

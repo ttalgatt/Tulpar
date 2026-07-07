@@ -38,21 +38,22 @@ export default async function EditListingPage({ params }: PageProps) {
 				categories={categories}
 				regions={regions}
 				locale={locale}
-				initial={{
-					categoryId: listing.category_id,
-					regionId: listing.region_id,
-					cityId: listing.city_id,
-					districtId: listing.district_id,
-					title: listing.title ?? '',
-					description: listing.description ?? '',
-					price: listing.price ?? null,
-					currency: listing.currency,
-					dealType: listing.deal_type,
-					quantity: listing.quantity ?? null,
-					unit: listing.unit ?? null,
-					isBulk: listing.is_bulk,
-					photos,
-				}}
+			initial={{
+				categoryId: listing.category_id,
+				regionId: listing.region_id,
+				cityId: listing.city_id,
+				districtId: listing.district_id,
+				title: listing.title ?? '',
+				description: listing.description ?? '',
+				price: listing.price ?? null,
+				currency: listing.currency,
+				dealType: listing.deal_type,
+				quantity: listing.quantity ?? null,
+				unit: listing.unit ?? null,
+				isBulk: listing.is_bulk,
+				ageMonths: (listing.age_months as number | null) ?? null,
+				photos,
+			}}
 			/>
 		</div>
 	);

@@ -31,6 +31,8 @@ export default async function ListingsPage({
 		districtId: pick(sp.districtId),
 		priceMin: pick(sp.priceMin),
 		priceMax: pick(sp.priceMax),
+		ageMin: pick(sp.ageMin),
+		ageMax: pick(sp.ageMax),
 		dealType: pick(sp.dealType),
 		withPhoto: pick(sp.withPhoto),
 		sort: pick(sp.sort),

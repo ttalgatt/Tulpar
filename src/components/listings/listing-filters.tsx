@@ -54,6 +54,8 @@ interface Filters {
 	districtId?: number;
 	priceMin?: number;
 	priceMax?: number;
+	ageMin?: number;
+	ageMax?: number;
 	dealType?: 'sale' | 'gift' | 'exchange';
 	sort?: 'newest' | 'priceAsc' | 'priceDesc';
 }
@@ -80,6 +82,8 @@ export function ListingFilters({ categories, regions, locale, initial }: Props) 
 	const [districtId, setDistrictId] = useState(initial.districtId);
 	const [priceMin, setPriceMin] = useState(initial.priceMin?.toString() ?? '');
 	const [priceMax, setPriceMax] = useState(initial.priceMax?.toString() ?? '');
+	const [ageMin, setAgeMin] = useState(initial.ageMin?.toString() ?? '');
+	const [ageMax, setAgeMax] = useState(initial.ageMax?.toString() ?? '');
 	const [dealType, setDealType] = useState(initial.dealType);
 	const [sort, setSort] = useState<Filters['sort']>(initial.sort ?? 'newest');
 	const [cities, setCities] = useState<City[]>([]);
@@ -125,6 +129,8 @@ export function ListingFilters({ categories, regions, locale, initial }: Props) 
 		if (districtId) params.set('districtId', String(districtId));
 		if (priceMin) params.set('priceMin', priceMin);
 		if (priceMax) params.set('priceMax', priceMax);
+		if (ageMin) params.set('ageMin', ageMin);
+		if (ageMax) params.set('ageMax', ageMax);
 		if (dealType) params.set('dealType', dealType);
 		if (sort && sort !== 'newest') params.set('sort', sort);
 		const qs = params.toString();
@@ -142,6 +148,8 @@ export function ListingFilters({ categories, regions, locale, initial }: Props) 
 		setDistrictId(undefined);
 		setPriceMin('');
 		setPriceMax('');
+		setAgeMin('');
+		setAgeMax('');
 		setDealType(undefined);
 		setSort('newest');
 		startTransition(() => router.push(pathname as never));
@@ -249,29 +257,52 @@ export function ListingFilters({ categories, regions, locale, initial }: Props) 
 					)}
 				</div>
 
-				<div className="grid grid-cols-2 gap-2">
-					<div className="space-y-1">
-						<Label className="text-xs">{t('filters.priceFrom')}</Label>
-						<Input
-							type="number"
-							inputMode="numeric"
-							value={priceMin}
-							onChange={(e) => setPriceMin(e.target.value)}
-						/>
-					</div>
-					<div className="space-y-1">
-						<Label className="text-xs">{t('filters.priceTo')}</Label>
-						<Input
-							type="number"
-							inputMode="numeric"
-							value={priceMax}
-							onChange={(e) => setPriceMax(e.target.value)}
-						/>
-					</div>
+			<div className="grid grid-cols-2 gap-2">
+				<div className="space-y-1">
+					<Label className="text-xs">{t('filters.priceFrom')}</Label>
+					<Input
+						type="number"
+						inputMode="numeric"
+						value={priceMin}
+						onChange={(e) => setPriceMin(e.target.value)}
+					/>
 				</div>
+				<div className="space-y-1">
+					<Label className="text-xs">{t('filters.priceTo')}</Label>
+					<Input
+						type="number"
+						inputMode="numeric"
+						value={priceMax}
+						onChange={(e) => setPriceMax(e.target.value)}
+					/>
+				</div>
+			</div>
 
-				<div className="space-y-2">
-					<Label>{t('filters.dealType')}</Label>
+			<div className="grid grid-cols-2 gap-2">
+				<div className="space-y-1">
+					<Label className="text-xs">{t('filters.ageFrom')}</Label>
+					<Input
+						type="number"
+						inputMode="numeric"
+						min={0}
+						value={ageMin}
+						onChange={(e) => setAgeMin(e.target.value)}
+					/>
+				</div>
+				<div className="space-y-1">
+					<Label className="text-xs">{t('filters.ageTo')}</Label>
+					<Input
+						type="number"
+						inputMode="numeric"
+						min={0}
+						value={ageMax}
+						onChange={(e) => setAgeMax(e.target.value)}
+					/>
+				</div>
+			</div>
+
+			<div className="space-y-2">
+				<Label>{t('filters.dealType')}</Label>
 					<Select
 						value={dealType ?? 'all'}
 						onValueChange={(v) => setDealType(v === 'all' ? undefined : (v as never))}

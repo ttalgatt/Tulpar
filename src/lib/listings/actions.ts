@@ -48,6 +48,7 @@ export async function createListingAction(
 			quantity: data.quantity ?? null,
 			unit: data.unit ?? null,
 			is_bulk: data.isBulk,
+			age_months: data.ageMonths ?? null,
 			contact_phone: data.contactPhone || null,
 			status,
 		})
@@ -106,6 +107,7 @@ export async function updateListingAction(
 		quantity: data.quantity ?? null,
 		unit: data.unit ?? null,
 		is_bulk: data.isBulk,
+		age_months: data.ageMonths ?? null,
 		contact_phone: data.contactPhone || null,
 	};
 	if (options.publish) updates.status = 'pending';

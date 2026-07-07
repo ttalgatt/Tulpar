@@ -21,7 +21,7 @@ export default async function FavoritesPage({
 	const { data } = await supabase
 		.from('favorites')
 		.select(
-			'listing_id, listings(id, title, price, currency, deal_type, is_bulk, quantity, unit, created_at, status, listing_photos(path, order_index))',
+			'listing_id, listings(id, title, price, currency, deal_type, is_bulk, quantity, unit, age_months, created_at, status, listing_photos(path, order_index))',
 		)
 		.eq('user_id', user!.id)
 		.order('created_at', { ascending: false });

@@ -13,7 +13,7 @@ import { FavoriteButton } from '@/components/listings/favorite-button';
 import { Gallery } from '@/components/listings/gallery';
 import { ViewTracker } from '@/components/listings/view-tracker';
 import { ReportButton } from '@/components/listings/report-button';
-import { formatPrice, formatRelativeDate } from '@/lib/utils';
+import { formatPrice, formatRelativeDate, formatAge } from '@/lib/utils';
 import { Eye, MapPin, User as UserIcon } from 'lucide-react';
 
 interface PageProps {
@@ -184,11 +184,16 @@ export default async function ListingDetailPage({ params }: PageProps) {
 									? t('card.gift')
 									: formatPrice(listing.price, listing.currency, localeTag) ?? '—'}
 							</div>
-							{listing.quantity && listing.unit && (
-								<div className="mt-1 text-sm text-muted-foreground">
-									{listing.quantity} {t(`units.${listing.unit}`)}
-								</div>
-							)}
+						{listing.quantity && listing.unit && (
+							<div className="mt-1 text-sm text-muted-foreground">
+								{listing.quantity} {t(`units.${listing.unit}`)}
+							</div>
+						)}
+						{(listing.age_months as number | null) != null && (
+							<div className="mt-1 text-sm text-muted-foreground">
+								{t('fields.age')}: {formatAge(listing.age_months as number, locale)}
+							</div>
+						)}
 
 							<div className="mt-6 flex flex-col gap-2">
 								<ContactSellerButton

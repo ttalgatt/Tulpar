@@ -1,10 +1,11 @@
+import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
 import { LocaleSwitcher } from '@/components/layout/locale-switcher';
 import { UserMenu } from '@/components/layout/user-menu';
 import { getCurrentUser, isModerator } from '@/lib/auth';
-import { PawPrint, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 export async function Header() {
 	const t = await getTranslations('nav');
@@ -14,7 +15,14 @@ export async function Header() {
 		<header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
 			<div className="container flex h-16 items-center gap-4">
 				<Link href="/" className="flex items-center gap-2 text-lg font-bold">
-					<PawPrint className="h-6 w-6 text-primary" />
+					<Image
+						src="/logo.png"
+						alt="Tulpar"
+						width={36}
+						height={36}
+						priority
+						className="h-9 w-9"
+					/>
 					<span>Tulpar</span>
 				</Link>
 

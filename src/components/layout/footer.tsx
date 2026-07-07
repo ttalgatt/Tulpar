@@ -1,6 +1,6 @@
+import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
-import { PawPrint } from 'lucide-react';
 
 export async function Footer() {
 	const t = await getTranslations('footer');
@@ -12,7 +12,7 @@ export async function Footer() {
 			<div className="container py-10 grid gap-8 sm:grid-cols-2 md:grid-cols-4">
 				<div>
 					<div className="flex items-center gap-2 font-bold text-lg mb-2">
-						<PawPrint className="h-5 w-5 text-primary" />
+						<Image src="/logo.png" alt="Tulpar" width={28} height={28} className="h-7 w-7" />
 						<span>Tulpar</span>
 					</div>
 					<p className="text-sm text-muted-foreground">{tCommon('tagline')}</p>

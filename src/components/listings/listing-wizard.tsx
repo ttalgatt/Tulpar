@@ -19,7 +19,7 @@ import { useToast } from '@/hooks/use-toast';
 import { createClient } from '@/lib/supabase/client';
 import { createListingAction, updateListingAction } from '@/lib/listings/actions';
 import { photoPublicUrl } from '@/lib/listings/storage';
-import { cn } from '@/lib/utils';
+import { cn, formatAge } from '@/lib/utils';
 import type { ListingInput } from '@/lib/listings/schemas';
 import { Loader2, Upload, X, GripVertical } from 'lucide-react';
 
@@ -102,6 +102,15 @@ export function ListingWizard({
 	);
 	const [unit, setUnit] = useState<'piece' | 'head' | 'kg' | ''>(initial?.unit ?? '');
 	const [isBulk, setIsBulk] = useState<boolean>(initial?.isBulk ?? false);
+	const [ageValue, setAgeValue] = useState<string>(() => {
+		if (!initial?.ageMonths) return '';
+		const m = initial.ageMonths;
+		return m % 12 === 0 ? String(m / 12) : String(m);
+	});
+	const [ageUnit, setAgeUnit] = useState<'months' | 'years'>(() => {
+		if (!initial?.ageMonths) return 'months';
+		return initial.ageMonths % 12 === 0 ? 'years' : 'months';
+	});
 	const [contactPhone, setContactPhone] = useState(initial?.contactPhone ?? '');
 
 	function formatPhone(raw: string): string {
@@ -186,6 +195,11 @@ export function ListingWizard({
 	}
 
 	function buildInput(): ListingInput {
+		let ageMonths: number | null = null;
+		if (ageValue) {
+			const v = Number(ageValue);
+			ageMonths = ageUnit === 'years' ? Math.round(v * 12) : Math.round(v);
+		}
 		return {
 			categoryId: categoryId!,
 			regionId,
@@ -199,6 +213,7 @@ export function ListingWizard({
 			quantity: quantity ? Number(quantity) : null,
 			unit: unit || null,
 			isBulk,
+			ageMonths,
 			photos: photos.map((p, i) => ({ path: p.path, orderIndex: i })),
 			contactPhone,
 		};
@@ -380,6 +395,35 @@ export function ListingWizard({
 								)}
 							</div>
 
+							{(selectedCategory?.kind === 'pets' || selectedCategory?.kind === 'livestock') && (
+								<div className="space-y-2">
+									<Label>{t('fields.age')}</Label>
+									<div className="flex gap-2">
+										<Input
+											type="number"
+											inputMode="numeric"
+											min={0}
+											value={ageValue}
+											onChange={(e) => setAgeValue(e.target.value)}
+											className="w-28"
+											placeholder="—"
+										/>
+										<Select
+											value={ageUnit}
+											onValueChange={(v) => setAgeUnit(v as 'months' | 'years')}
+										>
+											<SelectTrigger className="w-32">
+												<SelectValue />
+											</SelectTrigger>
+											<SelectContent>
+												<SelectItem value="months">{t('fields.ageMonths')}</SelectItem>
+												<SelectItem value="years">{t('fields.ageYears')}</SelectItem>
+											</SelectContent>
+										</Select>
+									</div>
+								</div>
+							)}
+
 							<div className="space-y-2">
 								<Label htmlFor="contactPhone">{t('fields.contactPhone')}</Label>
 								<Input
@@ -525,12 +569,20 @@ export function ListingWizard({
 							<Row label={t('fields.title')}>{title || '—'}</Row>
 							<Row label={t('fields.dealType')}>{t(`dealTypes.${dealType}`)}</Row>
 							{price && <Row label={t('fields.price')}>{price} KZT</Row>}
-							{quantity && (
-								<Row label={t('fields.quantity')}>
-									{quantity} {unit ? t(`units.${unit}`) : ''}
-								</Row>
-							)}
-							<Row label={t('fields.region')}>
+						{quantity && (
+							<Row label={t('fields.quantity')}>
+								{quantity} {unit ? t(`units.${unit}`) : ''}
+							</Row>
+						)}
+						{ageValue && (
+							<Row label={t('fields.age')}>
+								{formatAge(
+									ageUnit === 'years' ? Math.round(Number(ageValue) * 12) : Math.round(Number(ageValue)),
+									locale,
+								)}
+							</Row>
+						)}
+						<Row label={t('fields.region')}>
 								{regions.find((r) => r.id === regionId)?.[localeKey] ?? '—'}
 							</Row>
 							<Row label={t('fields.city')}>
