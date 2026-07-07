@@ -324,24 +324,26 @@ export function ListingWizard({
 							</div>
 
 							<div className="grid gap-4 sm:grid-cols-2">
-								<div className="space-y-2">
-									<Label>{t('fields.dealType')}</Label>
-									<Select
-										value={dealType}
-										onValueChange={(v) => setDealType(v as typeof dealType)}
-									>
-										<SelectTrigger>
-											<SelectValue />
-										</SelectTrigger>
-										<SelectContent>
-											<SelectItem value="sale">{t('dealTypes.sale')}</SelectItem>
-											<SelectItem value="gift">{t('dealTypes.gift')}</SelectItem>
-											<SelectItem value="exchange">{t('dealTypes.exchange')}</SelectItem>
-										</SelectContent>
-									</Select>
-								</div>
+								{!isService && (
+									<div className="space-y-2">
+										<Label>{t('fields.dealType')}</Label>
+										<Select
+											value={dealType}
+											onValueChange={(v) => setDealType(v as typeof dealType)}
+										>
+											<SelectTrigger>
+												<SelectValue />
+											</SelectTrigger>
+											<SelectContent>
+												<SelectItem value="sale">{t('dealTypes.sale')}</SelectItem>
+												<SelectItem value="gift">{t('dealTypes.gift')}</SelectItem>
+												<SelectItem value="exchange">{t('dealTypes.exchange')}</SelectItem>
+											</SelectContent>
+										</Select>
+									</div>
+								)}
 
-								{dealType !== 'gift' && !isService && (
+								{(isService || dealType !== 'gift') && (
 									<div className="space-y-2">
 										<Label htmlFor="price">{t('fields.price')} (KZT)</Label>
 										<Input
@@ -566,9 +568,11 @@ export function ListingWizard({
 							<Row label={t('fields.category')}>
 								{selectedCategory ? selectedCategory[localeKey] : '—'}
 							</Row>
-							<Row label={t('fields.title')}>{title || '—'}</Row>
+						<Row label={t('fields.title')}>{title || '—'}</Row>
+						{!isService && (
 							<Row label={t('fields.dealType')}>{t(`dealTypes.${dealType}`)}</Row>
-							{price && <Row label={t('fields.price')}>{price} KZT</Row>}
+						)}
+						{price && <Row label={t('fields.price')}>{price} KZT</Row>}
 						{quantity && (
 							<Row label={t('fields.quantity')}>
 								{quantity} {unit ? t(`units.${unit}`) : ''}
@@ -596,6 +600,7 @@ export function ListingWizard({
 				</CardContent>
 			</Card>
 
+		{step < STEPS.length - 1 ? (
 			<div className="flex justify-between gap-2">
 				<Button
 					type="button"
@@ -605,27 +610,35 @@ export function ListingWizard({
 				>
 					{tCommon('back')}
 				</Button>
-
-				{step < STEPS.length - 1 ? (
-					<Button
-						type="button"
-						onClick={() => setStep((s) => Math.min(STEPS.length - 1, s + 1))}
-						disabled={!canGoNext() || isPending}
-					>
-						{tCommon('next')}
-					</Button>
-				) : (
-					<div className="flex gap-2">
-						<Button variant="outline" onClick={() => submit(false)} disabled={isPending}>
-							{t('actions.saveAsDraft')}
-						</Button>
-						<Button onClick={() => submit(true)} disabled={isPending}>
-							{isPending && <Loader2 className="mr-1 h-4 w-4 animate-spin" />}
-							{t('actions.submitForReview')}
-						</Button>
-					</div>
-				)}
+				<Button
+					type="button"
+					onClick={() => setStep((s) => Math.min(STEPS.length - 1, s + 1))}
+					disabled={!canGoNext() || isPending}
+				>
+					{tCommon('next')}
+				</Button>
 			</div>
+		) : (
+			<div className="flex flex-col gap-2 sm:flex-row sm:justify-between">
+				<Button
+					type="button"
+					variant="outline"
+					disabled={isPending}
+					onClick={() => setStep((s) => Math.max(0, s - 1))}
+				>
+					{tCommon('back')}
+				</Button>
+				<div className="flex flex-col gap-2 sm:flex-row">
+					<Button variant="outline" onClick={() => submit(false)} disabled={isPending}>
+						{t('actions.saveAsDraft')}
+					</Button>
+					<Button onClick={() => submit(true)} disabled={isPending}>
+						{isPending && <Loader2 className="mr-1 h-4 w-4 animate-spin" />}
+						{t('actions.submitForReview')}
+					</Button>
+				</div>
+			</div>
+		)}
 		</div>
 	);
 }

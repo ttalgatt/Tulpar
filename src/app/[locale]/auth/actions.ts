@@ -62,7 +62,7 @@ export async function signUpAction(formData: FormData): Promise<AuthResult> {
 
 	const supabase = await createClient();
 	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? '';
-	const { error } = await supabase.auth.signUp({
+	const { data, error } = await supabase.auth.signUp({
 		email: parsed.data.email,
 		password: parsed.data.password,
 		options: {
@@ -75,6 +75,11 @@ export async function signUpAction(formData: FormData): Promise<AuthResult> {
 			return { ok: false, error: t('emailTaken') };
 		}
 		return { ok: false, error: error.message };
+	}
+	// Supabase с включённым Confirm email при дубле не возвращает ошибку,
+	// но user.identities будет пустым массивом
+	if (data.user && data.user.identities?.length === 0) {
+		return { ok: false, error: t('emailTaken') };
 	}
 
 	revalidatePath('/', 'layout');
