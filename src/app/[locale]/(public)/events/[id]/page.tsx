@@ -12,7 +12,7 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-	const { id } = await params;
+	const { id, locale } = await params;
 	const supabase = await createClient();
 	const { data: event } = await supabase
 		.from('events')
@@ -20,16 +20,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 		.eq('id', id)
 		.maybeSingle();
 	if (!event) return { title: '404' };
-	const title = event.title;
-	const description = event.description ?? '';
-	const image = event.cover_path ? eventCoverUrl(event.cover_path) : undefined;
+
+	const title = event.title ?? 'Событие';
+	const description = (event.description ?? '').slice(0, 200);
+	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://buzau.kz';
+	const url = `${siteUrl}/${locale === 'kk' ? 'kk/' : ''}events/${id}`;
+
 	return {
-		title: title ?? 'Event',
-		description: description.slice(0, 200),
+		title,
+		description,
 		openGraph: {
-			title: title ?? '',
-			description: description.slice(0, 200),
-			images: image ? [{ url: image }] : undefined,
+			title,
+			description,
+			type: 'website',
+			url,
+			siteName: 'Бұзау',
+			locale: locale === 'kk' ? 'kk_KZ' : 'ru_KZ',
+		},
+		twitter: {
+			card: 'summary_large_image',
+			title,
+			description,
 		},
 	};
 }

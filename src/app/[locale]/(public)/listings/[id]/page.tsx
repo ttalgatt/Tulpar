@@ -21,23 +21,30 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-	const { id } = await params;
+	const { id, locale } = await params;
 	const listing = await fetchListing(id);
 	if (!listing) return { title: '404' };
 
 	const title = listing.title ?? '';
-	const description = listing.description ?? title ?? '';
-	const photo = listing.listing_photos?.[0]?.path
-		? photoPublicUrl(listing.listing_photos[0].path)
-		: undefined;
+	const description = (listing.description ?? title).slice(0, 200);
+	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://buzau.kz';
+	const url = `${siteUrl}/${locale === 'kk' ? 'kk/' : ''}listings/${id}`;
 
 	return {
-		title: title ?? 'Listing',
-		description: description?.slice(0, 200),
+		title,
+		description,
 		openGraph: {
-			title: title ?? '',
-			description: description?.slice(0, 200),
-			images: photo ? [{ url: photo }] : undefined,
+			title,
+			description,
+			type: 'website',
+			url,
+			siteName: 'Бұзау',
+			locale: locale === 'kk' ? 'kk_KZ' : 'ru_KZ',
+		},
+		twitter: {
+			card: 'summary_large_image',
+			title,
+			description,
 		},
 	};
 }
