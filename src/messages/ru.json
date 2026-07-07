@@ -141,6 +141,7 @@
 		},
 		"filters": {
 			"title": "Фильтры",
+			"searchByWords": "Поиск по словам",
 			"category": "Категория",
 			"location": "Локация",
 			"priceFrom": "Цена от",

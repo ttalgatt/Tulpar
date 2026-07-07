@@ -65,23 +65,7 @@ export function HomeSearch({ categories, regions, locale }: Props) {
 			onSubmit={submit}
 			className="rounded-xl border bg-background p-3 shadow-sm md:p-4"
 		>
-			<div className="flex flex-col gap-2 md:flex-row md:items-center">
-				<div className="relative flex-1">
-					<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-					<input
-						type="search"
-						value={q}
-						onChange={(e) => setQ(e.target.value)}
-						placeholder={t('filters.title')}
-						className="h-11 w-full rounded-md border border-input bg-background pl-10 pr-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-					/>
-				</div>
-				<Button type="submit" size="lg" disabled={isPending} className="h-11">
-					{tCommon('search')}
-				</Button>
-			</div>
-
-			<div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
+			<div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
 				<Select value={regionId} onValueChange={setRegionId}>
 					<SelectTrigger className="h-10">
 						<SelectValue placeholder={t('filters.location')} />
@@ -121,6 +105,22 @@ export function HomeSearch({ categories, regions, locale }: Props) {
 						<SelectItem value="exchange">{t('dealTypes.exchange')}</SelectItem>
 					</SelectContent>
 				</Select>
+			</div>
+
+			<div className="mt-2 flex flex-col gap-2 md:flex-row md:items-center">
+				<div className="relative flex-1">
+					<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+					<input
+						type="search"
+						value={q}
+						onChange={(e) => setQ(e.target.value)}
+						placeholder={t('filters.searchByWords')}
+						className="h-11 w-full rounded-md border border-input bg-background pl-10 pr-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+					/>
+				</div>
+				<Button type="submit" size="lg" disabled={isPending} className="h-11">
+					{tCommon('search')}
+				</Button>
 			</div>
 		</form>
 	);

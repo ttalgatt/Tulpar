@@ -141,6 +141,7 @@
 		},
 		"filters": {
 			"title": "Сүзгілер",
+			"searchByWords": "Сөз бойынша іздеу",
 			"category": "Санат",
 			"location": "Орналасуы",
 			"priceFrom": "Бағасы бастап",
