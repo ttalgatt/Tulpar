@@ -59,33 +59,26 @@ export async function Header() {
 					</Link>
 				</nav>
 
-				<div className="ml-auto flex items-center gap-2">
-					<LocaleSwitcher />
-					{user ? (
-						<>
-							<Button asChild size="sm" className="hidden sm:inline-flex">
-								<Link href="/listings/new">
-									<Plus className="mr-1 h-4 w-4" />
-									{t('createListing')}
-								</Link>
-							</Button>
-							<UserMenu
-								email={user.email ?? ''}
-								userId={user.id}
-								isModerator={isModerator(user)}
-							/>
-						</>
-					) : (
-						<>
-							<Button asChild variant="ghost" size="sm">
-								<Link href="/auth/login">{t('signIn')}</Link>
-							</Button>
-							<Button asChild size="sm">
-								<Link href="/auth/register">{t('signUp')}</Link>
-							</Button>
-						</>
-					)}
-				</div>
+			<div className="ml-auto flex items-center gap-2">
+				<LocaleSwitcher />
+				<Button asChild size="sm">
+					<Link href={user ? '/listings/new' : '/auth/register'}>
+						<Plus className="mr-1 h-4 w-4" />
+						{t('createListing')}
+					</Link>
+				</Button>
+				{user ? (
+					<UserMenu
+						email={user.email ?? ''}
+						userId={user.id}
+						isModerator={isModerator(user)}
+					/>
+				) : (
+					<Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
+						<Link href="/auth/login">{t('signIn')}</Link>
+					</Button>
+				)}
+			</div>
 			</div>
 		</header>
 	);
