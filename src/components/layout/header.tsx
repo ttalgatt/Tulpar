@@ -9,12 +9,13 @@ import { Plus } from 'lucide-react';
 
 export async function Header() {
 	const t = await getTranslations('nav');
+	const tCommon = await getTranslations('common');
 	const user = await getCurrentUser();
 
 	return (
 		<header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
 			<div className="container flex h-16 items-center gap-4">
-				<Link href="/" className="flex items-center gap-2 text-lg font-bold">
+			<Link href="/" className="flex items-center gap-2">
 				<Image
 					src="/logo.png"
 					alt="Бұзау"
@@ -23,8 +24,13 @@ export async function Header() {
 					priority
 					className="h-9 w-9"
 				/>
-				<span>Бұзау</span>
-				</Link>
+				<div className="flex flex-col leading-tight">
+					<span className="text-lg font-bold">Бұзау</span>
+					<span className="hidden text-[11px] text-muted-foreground sm:block">
+						{tCommon('tagline')}
+					</span>
+				</div>
+			</Link>
 
 				<nav className="ml-6 hidden items-center gap-1 text-sm font-medium md:flex">
 					<Link
