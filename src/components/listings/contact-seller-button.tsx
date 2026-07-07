@@ -43,6 +43,10 @@ export function ContactSellerButton({ phone, isAuthenticated }: Props) {
 	}
 
 	const tel = phone.replace(/[^0-9+]/g, '');
+	const waNumber = tel.replace(/[^0-9]/g, '');
+	const waText = encodeURIComponent(t('whatsappGreeting'));
+	const waUrl = `https://wa.me/${waNumber}?text=${waText}`;
+
 	return (
 		<>
 			<Button asChild>
@@ -52,11 +56,7 @@ export function ContactSellerButton({ phone, isAuthenticated }: Props) {
 				</a>
 			</Button>
 			<Button asChild variant="outline">
-				<a
-					href={`https://wa.me/${tel.replace(/[^0-9]/g, '')}`}
-					target="_blank"
-					rel="noopener noreferrer"
-				>
+				<a href={waUrl} target="_blank" rel="noopener noreferrer">
 					<MessageCircle className="mr-2 h-4 w-4" />
 					WhatsApp
 				</a>

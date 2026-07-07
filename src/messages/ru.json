@@ -167,6 +167,7 @@
 		},
 		"detail": {
 			"showPhone": "Показать телефон",
+			"whatsappGreeting": "Здравствуйте! Пишу вам с сайта Buzau.kz по поводу вашего объявления.",
 			"signInToContact": "Войдите, чтобы увидеть контакты",
 			"description": "Описание",
 			"characteristics": "Характеристики",
