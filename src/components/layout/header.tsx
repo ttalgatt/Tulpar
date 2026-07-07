@@ -25,7 +25,7 @@ export async function Header() {
 					className="h-9 w-9"
 				/>
 				<div className="flex flex-col leading-tight">
-					<span className="text-lg font-bold">Бұзау</span>
+					<span className="font-heading text-lg font-bold">Бұзау</span>
 					<span className="hidden text-[11px] text-muted-foreground sm:block">
 						{tCommon('tagline')}
 					</span>

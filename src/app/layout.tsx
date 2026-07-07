@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { Inter } from 'next/font/google';
+import { Inter, Comfortaa } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'], variable: '--font-sans' });
+const comfortaa = Comfortaa({ subsets: ['latin', 'cyrillic'], variable: '--font-heading', display: 'swap' });
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://buzau.kz';
 
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
-		<html lang="ru" suppressHydrationWarning className={cn(inter.variable, 'h-full')}>
+		<html lang="ru" suppressHydrationWarning className={cn(inter.variable, comfortaa.variable, 'h-full')}>
 			<body className="flex min-h-full flex-col font-sans antialiased">{children}</body>
 		</html>
 	);
