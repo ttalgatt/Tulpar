@@ -7,7 +7,9 @@ import { createClient } from '@/lib/supabase/server';
 import { ListingCard } from '@/components/listings/listing-card';
 import { HomeSearch } from '@/components/listings/home-search';
 import { fetchCategories, fetchRegions } from '@/lib/listings/queries';
+import Image from 'next/image';
 import { ArrowRight, PawPrint, Calendar } from 'lucide-react';
+import { eventCoverUrl } from '@/lib/listings/storage';
 
 export const revalidate = 60;
 
@@ -53,7 +55,7 @@ export default async function HomePage({
 		.eq('status', 'published')
 		.gte('starts_at', new Date().toISOString())
 		.order('starts_at', { ascending: true })
-		.limit(3);
+		.limit(2);
 
 	return (
 		<div>
@@ -95,21 +97,41 @@ export default async function HomePage({
 							</Link>
 						</Button>
 					</div>
-					<div className="grid gap-4 md:grid-cols-3">
-						{events.map((e) => (
-							<Card key={e.id}>
-								<CardContent className="p-4">
-									<Calendar className="mb-2 h-5 w-5 text-muted-foreground" />
-									<div className="font-semibold">{e.title}</div>
-									<div className="mt-1 text-sm text-muted-foreground">
-										{new Intl.DateTimeFormat(locale === 'kk' ? 'kk-KZ' : 'ru-RU', {
-											day: '2-digit',
-											month: 'long',
-										}).format(new Date(e.starts_at))}
-									</div>
-								</CardContent>
-							</Card>
-						))}
+					<div className="grid gap-4 sm:grid-cols-2">
+						{events.map((e) => {
+							const cover = eventCoverUrl(e.cover_path);
+							const dateStr = new Intl.DateTimeFormat(locale === 'kk' ? 'kk-KZ' : 'ru-RU', {
+								day: '2-digit',
+								month: 'long',
+								year: 'numeric',
+							}).format(new Date(e.starts_at));
+							return (
+								<Card key={e.id} className="overflow-hidden">
+									{cover ? (
+										<div className="relative aspect-video w-full bg-muted">
+											<Image
+												src={cover}
+												alt={e.title ?? ''}
+												fill
+												sizes="(min-width: 640px) 50vw, 100vw"
+												className="object-cover"
+											/>
+										</div>
+									) : (
+										<div className="flex aspect-video w-full items-center justify-center bg-muted">
+											<Calendar className="h-10 w-10 text-muted-foreground opacity-30" />
+										</div>
+									)}
+									<CardContent className="p-4">
+										<div className="font-semibold leading-snug">{e.title}</div>
+										<div className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
+											<Calendar className="h-3.5 w-3.5 shrink-0" />
+											{dateStr}
+										</div>
+									</CardContent>
+								</Card>
+							);
+						})}
 					</div>
 				</section>
 			)}

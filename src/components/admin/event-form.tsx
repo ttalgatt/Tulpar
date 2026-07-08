@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
+import Image from 'next/image';
 import { useRouter } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,6 +16,8 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { createEventAction } from '@/lib/admin/actions';
+import { createClient } from '@/lib/supabase/client';
+import { eventCoverUrl } from '@/lib/listings/storage';
 
 interface Region {
 	id: number;
@@ -43,9 +46,38 @@ export function EventForm({
 	const [isPending, startTransition] = useTransition();
 	const [regionId, setRegionId] = useState<string>('');
 	const [cityId, setCityId] = useState<string>('');
+	const [coverPath, setCoverPath] = useState<string>('');
+	const [coverPreview, setCoverPreview] = useState<string | null>(null);
+	const [uploading, setUploading] = useState(false);
+	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const localeKey = locale === 'kk' ? 'name_kk' : 'name_ru';
 	const filteredCities = regionId ? cities.filter((c) => c.region_id === Number(regionId)) : [];
+
+	async function handleCoverChange(e: React.ChangeEvent<HTMLInputElement>) {
+		const file = e.target.files?.[0];
+		if (!file) return;
+		setUploading(true);
+		const supabase = createClient();
+		const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+		const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+		const { error } = await supabase.storage
+			.from('event-covers')
+			.upload(path, file, { contentType: file.type, upsert: false });
+		if (error) {
+			toast({ variant: 'destructive', title: 'Ошибка загрузки', description: error.message });
+		} else {
+			setCoverPath(path);
+			setCoverPreview(eventCoverUrl(path));
+		}
+		setUploading(false);
+	}
+
+	function removeCover() {
+		setCoverPath('');
+		setCoverPreview(null);
+		if (fileInputRef.current) fileInputRef.current.value = '';
+	}
 
 	function onSubmit(event: React.FormEvent<HTMLFormElement>) {
 		event.preventDefault();
@@ -60,6 +92,7 @@ export function EventForm({
 				cityId: cityId ? Number(cityId) : null,
 				address: String(formData.get('address') ?? ''),
 				organizer: String(formData.get('organizer') ?? ''),
+				coverPath,
 				publish: formData.get('publish') === 'on',
 			});
 			if (res.ok) {
@@ -67,6 +100,8 @@ export function EventForm({
 				form.reset();
 				setRegionId('');
 				setCityId('');
+				setCoverPath('');
+				setCoverPreview(null);
 				router.refresh();
 			} else toast({ variant: 'destructive', title: res.error });
 		});
@@ -125,12 +160,52 @@ export function EventForm({
 					<Label htmlFor="address">Адрес</Label>
 					<Input id="address" name="address" />
 				</div>
-				<div className="space-y-2 sm:col-span-2">
-					<Label htmlFor="organizer">Организатор</Label>
-					<Input id="organizer" name="organizer" />
-				</div>
+			<div className="space-y-2 sm:col-span-2">
+				<Label htmlFor="organizer">Организатор</Label>
+				<Input id="organizer" name="organizer" />
 			</div>
-			<label className="flex items-center gap-2 text-sm">
+			<div className="space-y-2 sm:col-span-2">
+				<Label>Обложка события</Label>
+				{coverPreview ? (
+					<div className="relative w-48">
+						<Image
+							src={coverPreview}
+							alt="Обложка"
+							width={192}
+							height={108}
+							className="rounded-md object-cover"
+						/>
+						<button
+							type="button"
+							onClick={removeCover}
+							className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs text-white"
+						>
+							&#x2715;
+						</button>
+					</div>
+				) : (
+					<div>
+						<input
+							ref={fileInputRef}
+							type="file"
+							accept="image/jpeg,image/png,image/webp"
+							className="hidden"
+							onChange={handleCoverChange}
+						/>
+						<Button
+							type="button"
+							variant="outline"
+							size="sm"
+							disabled={uploading}
+							onClick={() => fileInputRef.current?.click()}
+						>
+							{uploading ? 'Загрузка...' : 'Выбрать фото'}
+						</Button>
+					</div>
+				)}
+			</div>
+		</div>
+		<label className="flex items-center gap-2 text-sm">
 				<input type="checkbox" name="publish" className="h-4 w-4 rounded border-input" />
 				Опубликовать сразу
 			</label>
