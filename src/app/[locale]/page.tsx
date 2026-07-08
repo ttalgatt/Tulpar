@@ -53,8 +53,7 @@ export default async function HomePage({
 		.from('events')
 		.select('id, title, starts_at, cover_path')
 		.eq('status', 'published')
-		.gte('starts_at', new Date().toISOString())
-		.order('starts_at', { ascending: true })
+		.order('starts_at', { ascending: false })
 		.limit(2);
 
 	return (
