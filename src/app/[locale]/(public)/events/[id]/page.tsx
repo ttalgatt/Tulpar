@@ -16,26 +16,57 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 	const supabase = await createClient();
 	const { data: event } = await supabase
 		.from('events')
-		.select('title, description, cover_path')
+		.select('title, description, cover_path, starts_at, address, cities(name_ru, name_kk, regions(name_ru, name_kk))')
 		.eq('id', id)
 		.maybeSingle();
 	if (!event) return { title: '404' };
 
-	const title = event.title ?? 'Событие';
-	const description = (event.description ?? '').slice(0, 200);
+	const isKk = locale === 'kk';
+	const localeTag = isKk ? 'kk-KZ' : 'ru-RU';
+	const localeKey = isKk ? 'name_kk' : 'name_ru';
+
+	// Build rich title: "{name} — {date}, {city}"
+	const city = Array.isArray(event.cities) ? event.cities[0] : event.cities;
+	const region = city
+		? (Array.isArray((city as {regions?: unknown}).regions) ? ((city as {regions: Array<Record<string,string>>}).regions)[0] : (city as {regions?: Record<string,string>}).regions)
+		: null;
+	const dateStr = event.starts_at
+		? new Intl.DateTimeFormat(localeTag, { day: '2-digit', month: 'long', year: 'numeric' }).format(new Date(event.starts_at))
+		: null;
+	const locationStr = [
+		city?.[localeKey as keyof typeof city] as string | undefined,
+		region?.[localeKey] ?? undefined,
+		event.address ?? undefined,
+	].filter(Boolean).join(', ') || null;
+
+	const parts = [event.title ?? (isKk ? 'Іс-шара' : 'Событие')];
+	if (dateStr || locationStr) {
+		parts.push('—');
+		if (dateStr) parts.push(dateStr);
+		if (locationStr) parts.push(locationStr);
+	}
+	const title = parts.join(' ');
+	const description = (event.description?.trim()
+		? event.description
+		: title
+	).slice(0, 200);
+
 	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://buzau.kz';
-	const url = `${siteUrl}/${locale === 'kk' ? 'kk/' : ''}events/${id}`;
+	const url = `${siteUrl}/${isKk ? 'kk/' : ''}events/${id}`;
+	const coverUrl = eventCoverUrl(event.cover_path ?? null);
 
 	return {
 		title,
 		description,
+		alternates: { canonical: url },
 		openGraph: {
 			title,
 			description,
 			type: 'website',
 			url,
 			siteName: 'Бұзау',
-			locale: locale === 'kk' ? 'kk_KZ' : 'ru_KZ',
+			locale: isKk ? 'kk_KZ' : 'ru_KZ',
+			...(coverUrl ? { images: [{ url: coverUrl }] } : {}),
 		},
 		twitter: {
 			card: 'summary_large_image',
