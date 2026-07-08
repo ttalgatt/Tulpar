@@ -120,7 +120,7 @@ export default async function AboutPage({
 				<h2 className="text-2xl font-semibold mb-8 text-center">
 					{isKk ? 'Платформада не таба аласыз' : 'Что можно найти на сайте'}
 				</h2>
-				<div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+				<div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
 					{cats.map(({ icon: Icon, title, desc }) => (
 						<div
 							key={title}
@@ -143,7 +143,7 @@ export default async function AboutPage({
 				<h2 className="text-2xl font-semibold mb-8 text-center">
 					{isKk ? 'Неліктен Бұзау?' : 'Почему Бұзау?'}
 				</h2>
-				<div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+				<div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
 					{advs.map(({ icon: Icon, title, desc }) => (
 						<div key={title} className="flex gap-3">
 							<div className="flex-shrink-0 flex h-9 w-9 items-center justify-center rounded-lg bg-accent/20">

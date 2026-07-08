@@ -57,7 +57,7 @@ export default async function HomePage({
 					</Button>
 				</div>
 				{recentListings && recentListings.length > 0 ? (
-				<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+				<div className="grid grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-6">
 					{recentListings.map((l, i) => (
 						<ListingCard key={l.id} listing={l} locale={locale} priority={i < 6} />
 					))}
