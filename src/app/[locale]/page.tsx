@@ -24,7 +24,7 @@ export default async function HomePage({
 	const { data: recentListings } = await supabase
 		.from('listings')
 		.select(
-			'id, title, price, currency, deal_type, is_bulk, quantity, unit, age_months, created_at, status, listing_photos(path, order_index)',
+			'id, slug, title, price, currency, deal_type, is_bulk, quantity, unit, age_months, created_at, status, listing_photos(path, order_index), regions(name_ru)',
 		)
 		.eq('status', 'published')
 		.order('created_at', { ascending: false })
