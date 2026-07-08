@@ -68,6 +68,22 @@ export function formatAge(months: number, locale = 'ru'): string {
 	return parts.join(' ') || '0 мес.';
 }
 
+/**
+ * Builds a SEO-friendly URL segment for a listing.
+ * Format: {title-slug}-{region-slug}-{8hexchars}
+ * The 8-char suffix is derived from the stored slug or the listing UUID.
+ */
+export function listingSlug(
+	title: string | null,
+	regionName: string | null,
+	idOrSlug: string,
+): string {
+	// Accept either the stored 8-char slug or a full UUID — always take first 8 chars
+	const suffix = idOrSlug.slice(0, 8);
+	const parts = [slugify(title ?? ''), slugify(regionName ?? '')].filter(Boolean);
+	return [...parts, suffix].join('-');
+}
+
 export function slugify(input: string) {
 	const map: Record<string, string> = {
 		а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'e', ж: 'zh', з: 'z',

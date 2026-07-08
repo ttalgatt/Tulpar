@@ -3,7 +3,7 @@ import { Link } from '@/i18n/routing';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { ImageIcon } from 'lucide-react';
-import { formatPrice, formatRelativeDate, cn } from '@/lib/utils';
+import { formatPrice, formatRelativeDate, cn, listingSlug } from '@/lib/utils';
 import { photoPublicUrl } from '@/lib/listings/storage';
 import { getTranslations } from 'next-intl/server';
 import type { ListingListItem } from '@/lib/listings/queries';
@@ -22,8 +22,10 @@ export async function ListingCard({ listing, locale, className, priority = false
 	const cover = photos[0]?.path ? photoPublicUrl(photos[0].path) : null;
 	const localeTag = locale === 'kk' ? 'kk-KZ' : 'ru-RU';
 
+	const slug = listingSlug(listing.title, listing.regions?.name_ru ?? null, listing.slug ?? listing.id);
+
 	return (
-		<Link href={`/listings/${listing.id}`}>
+		<Link href={`/listings/${slug}`}>
 			<Card
 				className={cn(
 					'group h-full overflow-hidden transition-shadow hover:shadow-md',

@@ -4,6 +4,7 @@ import type { ListingFilters } from './schemas';
 
 export interface ListingListItem {
 	id: string;
+	slug: string | null;
 	title: string | null;
 	price: number | null;
 	currency: string;
@@ -15,6 +16,7 @@ export interface ListingListItem {
 	created_at: string;
 	status: string;
 	listing_photos: { path: string; order_index: number }[] | null;
+	regions: { name_ru: string } | null;
 }
 
 export interface ListingsResult {
@@ -33,7 +35,7 @@ export const fetchListings = cache(async (filters: ListingFilters): Promise<List
 	let query = supabase
 		.from('listings')
 		.select(
-			'id, title, price, currency, deal_type, is_bulk, quantity, unit, age_months, created_at, status, listing_photos(path, order_index)',
+			'id, slug, title, price, currency, deal_type, is_bulk, quantity, unit, age_months, created_at, status, listing_photos(path, order_index), regions(name_ru)',
 			{ count: 'exact' },
 		)
 		.eq('status', 'published');
@@ -86,12 +88,28 @@ export const fetchListings = cache(async (filters: ListingFilters): Promise<List
 	};
 });
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 // Uses service role to bypass RLS — authorization is enforced in the page
 // (status=published OR owner OR moderator). This avoids auth.uid() being NULL
 // in server components when the session cookie hasn't propagated through the
 // RSC render pipeline yet.
-export const fetchListing = cache(async (id: string) => {
+export const fetchListing = cache(async (idOrSlug: string) => {
 	const supabase = createServiceRoleClient();
+
+	// Resolve lookup field: full UUID → use id; slug segment → extract 8-char suffix
+	let filterColumn: 'id' | 'slug';
+	let filterValue: string;
+	if (UUID_RE.test(idOrSlug)) {
+		filterColumn = 'id';
+		filterValue = idOrSlug;
+	} else {
+		// Slug format: "{title-region-parts}-{8hexchars}" — extract last 8-char hex segment
+		const match = idOrSlug.match(/([0-9a-f]{8})$/i);
+		filterColumn = 'slug';
+		filterValue = match ? match[1] : idOrSlug;
+	}
+
 	const { data, error } = await supabase
 		.from('listings')
 		.select(
@@ -103,7 +121,7 @@ export const fetchListing = cache(async (id: string) => {
 			cities(id, slug, name_ru, name_kk),
 			districts(id, slug, name_ru, name_kk)`,
 		)
-		.eq('id', id)
+		.eq(filterColumn, filterValue)
 		.maybeSingle();
 	if (!data || error) return null;
 

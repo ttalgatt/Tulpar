@@ -52,7 +52,7 @@ export async function createListingAction(
 			contact_phone: data.contactPhone || null,
 			status,
 		})
-		.select('id')
+		.select('id, slug')
 		.single();
 
 	if (error || !inserted) {

@@ -2,7 +2,9 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Link } from '@/i18n/routing';
 import { fetchListing } from '@/lib/listings/queries';
+import { listingSlug } from '@/lib/utils';
 import { photoPublicUrl } from '@/lib/listings/storage';
 import { getCurrentUser, isModerator } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
@@ -28,11 +30,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 	const title = listing.title ?? '';
 	const description = (listing.description ?? title).slice(0, 200);
 	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://buzau.kz';
-	const url = `${siteUrl}/${locale === 'kk' ? 'kk/' : ''}listings/${id}`;
+	const region = Array.isArray(listing.regions) ? listing.regions[0] : listing.regions;
+	const slug = listingSlug(listing.title, region?.name_ru ?? null, listing.slug ?? listing.id);
+	const url = `${siteUrl}/${locale === 'kk' ? 'kk/' : ''}listings/${slug}`;
 
 	return {
 		title,
 		description,
+		alternates: {
+			canonical: url,
+		},
 		openGraph: {
 			title,
 			description,
@@ -115,22 +122,22 @@ export default async function ListingDetailPage({ params }: PageProps) {
 				</div>
 			)}
 
-			<nav className="mb-4 text-sm text-muted-foreground">
-				<a href={`/${locale}/listings`} className="hover:underline">
-					{t('title')}
-				</a>
-				{category && (
-					<>
-						<span className="mx-2">/</span>
-						<a
-							href={`/${locale}/listings?kind=${category.kind}`}
-							className="hover:underline"
-						>
-							{category[localeKey]}
-						</a>
-					</>
-				)}
-			</nav>
+		<nav className="mb-4 text-sm text-muted-foreground">
+			<Link href="/listings" className="hover:underline">
+				{t('title')}
+			</Link>
+			{category && (
+				<>
+					<span className="mx-2">/</span>
+					<Link
+						href={{ pathname: '/listings', query: { kind: category.kind } }}
+						className="hover:underline"
+					>
+						{category[localeKey]}
+					</Link>
+				</>
+			)}
+		</nav>
 
 			<div className="grid gap-6 lg:grid-cols-[1.5fr,1fr]">
 				<div>

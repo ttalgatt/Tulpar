@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
 import { Phone, MessageCircle } from 'lucide-react';
 
@@ -12,17 +11,9 @@ interface Props {
 	isAuthenticated: boolean;
 }
 
-export function ContactSellerButton({ phone, isAuthenticated }: Props) {
+export function ContactSellerButton({ phone }: Props) {
 	const t = useTranslations('listings.detail');
 	const [revealed, setRevealed] = useState(false);
-
-	if (!isAuthenticated) {
-		return (
-			<Button asChild>
-				<Link href="/auth/login">{t('signInToContact')}</Link>
-			</Button>
-		);
-	}
 
 	if (!phone) {
 		return (
