@@ -26,16 +26,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 	const localeKey = isKk ? 'name_kk' : 'name_ru';
 
 	// Build rich title: "{name} — {date}, {city}"
-	const city = Array.isArray(event.cities) ? event.cities[0] : event.cities;
-	const region = city
-		? (Array.isArray((city as {regions?: unknown}).regions) ? ((city as {regions: Array<Record<string,string>>}).regions)[0] : (city as {regions?: Record<string,string>}).regions)
-		: null;
+	type CityRow = { name_ru: string; name_kk: string; regions: unknown };
+	type RegionRow = { name_ru: string; name_kk: string };
+	const cityRaw = Array.isArray(event.cities) ? event.cities[0] : event.cities;
+	const city = cityRaw as CityRow | null;
+	const regionRaw = city ? (Array.isArray(city.regions) ? city.regions[0] : city.regions) : null;
+	const region = regionRaw as RegionRow | null;
+
 	const dateStr = event.starts_at
 		? new Intl.DateTimeFormat(localeTag, { day: '2-digit', month: 'long', year: 'numeric' }).format(new Date(event.starts_at))
 		: null;
 	const locationStr = [
-		city?.[localeKey as keyof typeof city] as string | undefined,
-		region?.[localeKey] ?? undefined,
+		city?.[localeKey as 'name_ru' | 'name_kk'],
+		region?.[localeKey as 'name_ru' | 'name_kk'],
 		event.address ?? undefined,
 	].filter(Boolean).join(', ') || null;
 
