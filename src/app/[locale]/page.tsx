@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
@@ -9,6 +10,22 @@ import { fetchCategories, fetchRegions } from '@/lib/listings/queries';
 import { ArrowRight, PawPrint, Calendar } from 'lucide-react';
 
 export const revalidate = 60;
+
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+	const { locale } = await params;
+	const isKk = locale === 'kk';
+	const title = isKk
+		? 'Бұзау — Қазақстандағы мал, үй жануарлары және тауарлар хабарландырулары'
+		: 'Бұзау — объявления о продаже скота, домашних животных и товаров в Казахстане';
+	const description = isKk
+		? 'Қазақстан бойынша мал, үй жануарлары, тауарлар мен қызметтерді сату-сатып алу хабарландырулары.'
+		: 'Покупайте и продавайте скот, домашних животных, товары и услуги по всему Казахстану.';
+	return { title, description };
+}
 
 export default async function HomePage({
 	params,
