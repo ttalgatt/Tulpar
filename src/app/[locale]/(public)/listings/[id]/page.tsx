@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { fetchListing } from '@/lib/listings/queries';
-import { listingSlug } from '@/lib/utils';
+import { formatPrice, formatRelativeDate, formatAge, listingSlug } from '@/lib/utils';
 import { photoPublicUrl } from '@/lib/listings/storage';
 import { getCurrentUser, isModerator } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
@@ -15,7 +15,6 @@ import { FavoriteButton } from '@/components/listings/favorite-button';
 import { Gallery } from '@/components/listings/gallery';
 import { ViewTracker } from '@/components/listings/view-tracker';
 import { ReportButton } from '@/components/listings/report-button';
-import { formatPrice, formatRelativeDate, formatAge } from '@/lib/utils';
 import { Eye, MapPin, User as UserIcon } from 'lucide-react';
 
 interface PageProps {
@@ -27,12 +26,33 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 	const listing = await fetchListing(id);
 	if (!listing) return { title: '404' };
 
-	const title = listing.title ?? '';
-	const description = (listing.description ?? title).slice(0, 200);
-	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://buzau.kz';
+	const isKk = locale === 'kk';
+	const localeTag = isKk ? 'kk-KZ' : 'ru-RU';
+	const localeKey = isKk ? 'name_kk' : 'name_ru';
+
 	const region = Array.isArray(listing.regions) ? listing.regions[0] : listing.regions;
+	const regionName = region?.[localeKey] ?? null;
+
+	// Build rich title: "Корова, 1 год 8 мес. — 22 222 KZT, ВКО"
+	const parts: string[] = [];
+	if (listing.title) parts.push(listing.title);
+	if ((listing.age_months as number | null) != null) {
+		parts[0] = [parts[0], formatAge(listing.age_months as number, locale)].filter(Boolean).join(', ');
+	}
+	const priceStr =
+		listing.deal_type === 'gift'
+			? (isKk ? 'Тегін' : 'Даром')
+			: (formatPrice(listing.price, listing.currency, localeTag) ?? null);
+	if (priceStr) parts.push(`— ${priceStr}`);
+	if (regionName) parts.push(regionName);
+	const title = parts.join(' ');
+
+	// Description: first 200 chars of listing description, or fallback to title
+	const description = (listing.description?.trim() ? listing.description : title).slice(0, 200);
+
+	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://buzau.kz';
 	const slug = listingSlug(listing.title, region?.name_ru ?? null, listing.slug ?? listing.id);
-	const url = `${siteUrl}/${locale === 'kk' ? 'kk/' : ''}listings/${slug}`;
+	const url = `${siteUrl}/${isKk ? 'kk/' : ''}listings/${slug}`;
 
 	return {
 		title,
@@ -46,7 +66,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 			type: 'website',
 			url,
 			siteName: 'Бұзау',
-			locale: locale === 'kk' ? 'kk_KZ' : 'ru_KZ',
+			locale: isKk ? 'kk_KZ' : 'ru_KZ',
 		},
 		twitter: {
 			card: 'summary_large_image',
