@@ -28,9 +28,12 @@ export function LocaleSwitcher() {
 
 	function change(next: Locale) {
 		startTransition(() => {
+			// useParams() includes `locale` which is not a route param — exclude it
+			// so next-intl can correctly substitute [id] and other dynamic segments
+			const { locale: _locale, ...routeParams } = params as Record<string, string>;
 			router.replace(
-				// @ts-expect-error — params в next-intl типизированы как параметры маршрута
-				{ pathname, params },
+				// @ts-expect-error — pathname typed as string, next-intl expects typed Href
+				{ pathname, params: routeParams },
 				{ locale: next },
 			);
 		});
