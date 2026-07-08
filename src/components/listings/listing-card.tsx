@@ -22,7 +22,10 @@ export async function ListingCard({ listing, locale, className, priority = false
 	const cover = photos[0]?.path ? photoPublicUrl(photos[0].path) : null;
 	const localeTag = locale === 'kk' ? 'kk-KZ' : 'ru-RU';
 
-	const slug = listingSlug(listing.title, listing.regions?.name_ru ?? null, listing.slug ?? listing.id);
+	const regionName = Array.isArray(listing.regions)
+		? (listing.regions[0]?.name_ru ?? null)
+		: (listing.regions?.name_ru ?? null);
+	const slug = listingSlug(listing.title, regionName, listing.slug ?? listing.id);
 
 	return (
 		<Link href={`/listings/${slug}`}>

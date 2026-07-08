@@ -16,7 +16,7 @@ export interface ListingListItem {
 	created_at: string;
 	status: string;
 	listing_photos: { path: string; order_index: number }[] | null;
-	regions: { name_ru: string } | null;
+	regions: { name_ru: string } | { name_ru: string }[] | null;
 }
 
 export interface ListingsResult {
