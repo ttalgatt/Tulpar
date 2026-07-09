@@ -78,7 +78,13 @@ export default async function EventsPage({
 								<Card className="h-full overflow-hidden transition-shadow hover:shadow-md">
 									<div className="relative aspect-video bg-muted">
 										{cover ? (
-											<Image src={cover} alt={title} fill className="object-cover" sizes="400px" />
+											<Image
+												src={cover}
+												alt={title}
+												fill
+												className="object-contain"
+												sizes="400px"
+											/>
 										) : (
 											<div className="flex h-full items-center justify-center text-muted-foreground">
 												<Calendar className="h-10 w-10 opacity-30" />

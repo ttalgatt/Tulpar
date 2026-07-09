@@ -114,7 +114,7 @@ export default async function HomePage({
 													alt={e.title ?? ''}
 													fill
 													sizes="(min-width: 640px) 50vw, 100vw"
-													className="object-cover transition-transform hover:scale-105"
+													className="object-contain transition-transform hover:scale-105"
 												/>
 											</div>
 										) : (

@@ -110,8 +110,16 @@ export default async function EventDetailPage({ params }: PageProps) {
 	return (
 		<div className="container py-6">
 			{cover && (
-				<div className="relative mb-6 aspect-[16/6] w-full overflow-hidden rounded-lg bg-muted">
-					<Image src={cover} alt={title} fill className="object-cover" priority sizes="100vw" />
+				<div className="mb-6 overflow-hidden rounded-lg bg-muted">
+					<Image
+						src={cover}
+						alt={title}
+						width={1600}
+						height={900}
+						className="mx-auto h-auto max-h-[480px] w-full object-contain"
+						priority
+						sizes="100vw"
+					/>
 				</div>
 			)}
 
