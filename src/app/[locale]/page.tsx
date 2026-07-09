@@ -64,7 +64,10 @@ export default async function HomePage({
 				</div>
 			</section>
 
-			<section className="container py-12">
+			<section className="container pt-8 pb-12">
+				<p className="mb-8 rounded-lg border border-primary/20 bg-gradient-to-r from-primary/10 via-accent/10 to-transparent px-4 py-3 text-sm leading-relaxed text-foreground md:text-[15px]">
+					{t('launchBanner')}
+				</p>
 				<div className="mb-6 flex items-center justify-between">
 					<h2 className="text-2xl font-bold">{t('recentListings')}</h2>
 					<Button asChild variant="ghost">
