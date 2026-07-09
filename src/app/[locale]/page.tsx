@@ -26,13 +26,7 @@ export async function generateMetadata({
 	const description = isKk
 		? 'Қазақстан бойынша мал, үй жануарлары, тауарлар мен қызметтерді сату-сатып алу хабарландырулары.'
 		: 'Покупайте и продавайте скот, домашних животных, товары и услуги по всему Казахстану.';
-	return {
-		title,
-		description,
-		verification: {
-			yandex: '5337b091ca4e6af0',
-		},
-	};
+	return { title, description };
 }
 
 export default async function HomePage({
