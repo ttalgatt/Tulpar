@@ -26,6 +26,7 @@ export const metadata: Metadata = {
 		card: 'summary_large_image',
 	},
 	verification: {
+		google: 'EaxnkEu8nXMqKDToHzkWIFeMOFx3TetvaP68iJ3bB-E',
 		yandex: 'a70196c607b0db38',
 	},
 };
