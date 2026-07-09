@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import { Mail } from 'lucide-react';
 
 export const metadata: Metadata = {
-	title: 'Контакты — Бұзау',
-	description: 'Свяжитесь с командой Бұзау по адресу support@buzau.kz',
+	title: 'Контакты — Бұзау.kz',
+	description: 'Свяжитесь с командой Бұзау.kz по адресу support@buzau.kz',
 };
 
 export default async function ContactsPage({

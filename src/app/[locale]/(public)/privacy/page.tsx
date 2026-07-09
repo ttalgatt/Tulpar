@@ -2,9 +2,9 @@ import { setRequestLocale } from 'next-intl/server';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-	title: 'Политика конфиденциальности — Бұзау',
+	title: 'Политика конфиденциальности — Бұзау.kz',
 	description:
-		'Политика конфиденциальности и обработки персональных данных маркетплейса Бұзау (buzau.kz)',
+		'Политика конфиденциальности и обработки персональных данных маркетплейса Бұзау.kz',
 };
 
 function PrivacyRu() {

@@ -12,12 +12,12 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://buzau.kz';
 export const metadata: Metadata = {
 	metadataBase: new URL(SITE_URL),
 	title: {
-		default: 'Бұзау',
-		template: '%s · Бұзау',
+		default: 'Бұзау.kz',
+		template: '%s · Бұзау.kz',
 	},
-	description: 'Бұзау — маркетплейс объявлений о животных по всему Казахстану',
+	description: 'Бұзау.kz — маркетплейс объявлений о животных по всему Казахстану',
 	openGraph: {
-		siteName: 'Бұзау',
+		siteName: 'Бұзау.kz',
 		type: 'website',
 		locale: 'ru_KZ',
 		url: SITE_URL,

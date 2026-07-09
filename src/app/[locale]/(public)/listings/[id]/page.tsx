@@ -65,7 +65,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 			description,
 			type: 'website',
 			url,
-			siteName: 'Бұзау',
+			siteName: 'Бұзау.kz',
 			locale: isKk ? 'kk_KZ' : 'ru_KZ',
 		},
 		twitter: {

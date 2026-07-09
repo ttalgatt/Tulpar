@@ -18,14 +18,14 @@ export async function Header() {
 			<Link href="/" className="flex items-center gap-2">
 				<Image
 					src="/logo.png"
-					alt="Бұзау"
+					alt="Бұзау.kz"
 					width={36}
 					height={36}
 					priority
 					className="h-9 w-9"
 				/>
 				<div className="flex flex-col leading-tight">
-					<span className="font-heading text-lg font-bold">Бұзау</span>
+					<span className="font-heading text-lg font-bold">Бұзау.kz</span>
 					<span className="hidden text-[11px] text-muted-foreground sm:block">
 						{tCommon('tagline')}
 					</span>
