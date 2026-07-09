@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 		card: 'summary_large_image',
 	},
 	verification: {
-		yandex: '603ca421b7195d72',
+		yandex: 'a70196c607b0db38',
 	},
 };
 
