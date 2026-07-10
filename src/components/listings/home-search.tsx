@@ -11,6 +11,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
+import { sortCategoriesByWizardOrder } from '@/lib/listings/categories';
 import { Search } from 'lucide-react';
 
 interface Category {
@@ -45,7 +46,9 @@ export function HomeSearch({ categories, regions, locale }: Props) {
 	const [dealType, setDealType] = useState<string>('all');
 
 	const localeKey = locale === 'kk' ? 'name_kk' : 'name_ru';
-	const selectableCategories = categories.filter((c) => c.kind !== 'events');
+	const selectableCategories = sortCategoriesByWizardOrder(
+		categories.filter((c) => c.kind !== 'events'),
+	);
 
 	function submit(e: React.FormEvent) {
 		e.preventDefault();

@@ -19,6 +19,7 @@ import { SearchableSelect } from '@/components/ui/searchable-select';
 import { useToast } from '@/hooks/use-toast';
 import { createClient } from '@/lib/supabase/client';
 import { createListingAction, updateListingAction } from '@/lib/listings/actions';
+import { CATEGORY_KIND_ORDER } from '@/lib/listings/categories';
 import { photoPublicUrl } from '@/lib/listings/storage';
 import { cn, formatAge } from '@/lib/utils';
 import type { ListingInput } from '@/lib/listings/schemas';
@@ -266,20 +267,17 @@ export function ListingWizard({
 
 	const localeKey = locale === 'kk' ? 'name_kk' : 'name_ru';
 
-	const kindOrder: Array<Category['kind']> = ['livestock', 'pets', 'goods', 'services'];
 	const kindLabels: Record<string, { ru: string; kk: string }> = {
 		pets: { ru: 'Домашние животные', kk: 'Үй жануарлары' },
 		livestock: { ru: 'Домашний скот', kk: 'Мал' },
 		goods: { ru: 'Товары', kk: 'Тауарлар' },
 		services: { ru: 'Услуги', kk: 'Қызметтер' },
 	};
-	const groupedCategories = kindOrder
-		.map((kind) => ({
-			kind,
-			label: locale === 'kk' ? kindLabels[kind].kk : kindLabels[kind].ru,
-			items: categories.filter((c) => c.kind === kind),
-		}))
-		.filter((group) => group.items.length > 0);
+	const groupedCategories = CATEGORY_KIND_ORDER.map((kind) => ({
+		kind,
+		label: locale === 'kk' ? kindLabels[kind].kk : kindLabels[kind].ru,
+		items: categories.filter((c) => c.kind === kind),
+	})).filter((group) => group.items.length > 0);
 
 	return (
 		<div className="space-y-6">

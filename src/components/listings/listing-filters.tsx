@@ -15,6 +15,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select';
 import { SearchableSelect } from '@/components/ui/searchable-select';
+import { sortCategoriesByWizardOrder } from '@/lib/listings/categories';
 import { createClient } from '@/lib/supabase/client';
 import { Search, X } from 'lucide-react';
 
@@ -156,7 +157,9 @@ export function ListingFilters({ categories, regions, locale, initial }: Props) 
 		startTransition(() => router.push(pathname as never));
 	}
 
-	const visibleCategories = kind ? categories.filter((c) => c.kind === kind) : categories;
+	const visibleCategories = sortCategoriesByWizardOrder(
+		kind ? categories.filter((c) => c.kind === kind) : categories,
+	);
 
 	return (
 		<Card>
