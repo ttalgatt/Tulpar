@@ -107,12 +107,15 @@ function esc(s) {
 }
 
 function stripRuPrefix(name) {
-	return name.replace(/^(г\.|с\.|п\.|ст\.|пгт\.?)\s*/i, '').trim();
+	return name
+		.replace(/^(г\.а\.|с\.а\.|г\.|с\.|п\.|ст\.|пгт\.?)\s*/i, '')
+		.replace(/^а\.\s*/i, '')
+		.trim();
 }
 
 function stripKzPrefix(name) {
 	return name
-		.replace(/\s+(қ|а|п|ст)\.$/i, '')
+		.replace(/\s+(а\.ә\.|қ\.ә\.|қ\.|а\.|п\.|ст\.)$/i, '')
 		.replace(/^(қ\.|а\.|п\.|ст\.)\s*/i, '')
 		.trim();
 }
@@ -125,12 +128,30 @@ function stripDistrictRu(name) {
 		.trim();
 }
 
+function isAdminUnitRu(name) {
+	// сельская/городская администрация — не населённый пункт
+	return /^с\.а\./i.test(name) || /^г\.а\./i.test(name);
+}
+
 function isSettlementRu(name) {
+	if (isAdminUnitRu(name)) return false;
 	return /^(г\.|с\.|п\.|ст\.|пгт\.?)/i.test(name);
 }
 
 function isCityDistrictRu(name) {
 	return /район/i.test(name);
+}
+
+/** Предпочтение при схлопывании одноимённых НП в одной области. */
+function settlementRank(s) {
+	let score = 0;
+	if (s.is_city) score += 100;
+	if (/^г\./i.test(s.raw_ru)) score += 50;
+	if (/^с\./i.test(s.raw_ru)) score += 20;
+	if (/^п\./i.test(s.raw_ru)) score += 10;
+	// короче код / «основной» центр округа обычно *100
+	if (/00$/.test(s.kato_code) || /100$/.test(s.kato_code)) score += 5;
+	return score;
 }
 
 function normalizeDisplayRu(name) {
@@ -242,10 +263,33 @@ for (const r of ru) {
 	}
 }
 
+// Схлопываем одноимённые НП в пределах области (оставляем лучший)
+const dedupedSettlements = [];
+const bestByKey = new Map(); // region_id|match_key -> settlement
+for (const s of settlements) {
+	const key = `${s.region_id}|${matchKeyName(s.name_ru)}`;
+	const prev = bestByKey.get(key);
+	if (!prev) {
+		bestByKey.set(key, s);
+		continue;
+	}
+	const rankNew = settlementRank(s);
+	const rankOld = settlementRank(prev);
+	if (rankNew > rankOld || (rankNew === rankOld && s.kato_code < prev.kato_code)) {
+		bestByKey.set(key, s);
+	}
+}
+for (const s of bestByKey.values()) dedupedSettlements.push(s);
+dedupedSettlements.sort((a, b) => a.region_id - b.region_id || a.kato_code.localeCompare(b.kato_code));
+
+console.error(
+	`Settlements raw: ${settlements.length}, after dedupe: ${dedupedSettlements.length} (−${settlements.length - dedupedSettlements.length})`,
+);
+
 // Unique slugs per region
 const cities = [];
 const usedSlugs = new Map(); // region_id -> Set
-for (const s of settlements) {
+for (const s of dedupedSettlements) {
 	if (!usedSlugs.has(s.region_id)) usedSlugs.set(s.region_id, new Set());
 	const set = usedSlugs.get(s.region_id);
 	let base = slugify(s.name_ru) || 'np';
