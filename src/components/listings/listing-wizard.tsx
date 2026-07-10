@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, useTransition } from 'react';
+import { useEffect, useMemo, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 import { useToast } from '@/hooks/use-toast';
 import { createClient } from '@/lib/supabase/client';
 import { createListingAction, updateListingAction } from '@/lib/listings/actions';
@@ -143,7 +144,7 @@ export function ListingWizard({
 		selectedCategory?.kind === 'livestock' || selectedCategory?.kind === 'goods';
 	const isService = selectedCategory?.kind === 'services';
 
-	async function loadCities(rId: number) {
+	async function loadCities(rId: number, keepSelection = false) {
 		const supabase = createClient();
 		const { data } = await supabase
 			.from('cities')
@@ -151,12 +152,14 @@ export function ListingWizard({
 			.eq('region_id', rId)
 			.order('name_ru');
 		setCities(data ?? []);
-		setDistricts([]);
-		setCityId(null);
-		setDistrictId(null);
+		if (!keepSelection) {
+			setDistricts([]);
+			setCityId(null);
+			setDistrictId(null);
+		}
 	}
 
-	async function loadDistricts(cId: number) {
+	async function loadDistricts(cId: number, keepSelection = false) {
 		const supabase = createClient();
 		const { data } = await supabase
 			.from('districts')
@@ -164,8 +167,19 @@ export function ListingWizard({
 			.eq('city_id', cId)
 			.order('name_ru');
 		setDistricts(data ?? []);
-		setDistrictId(null);
+		if (!keepSelection) {
+			setDistrictId(null);
+		}
 	}
+
+	useEffect(() => {
+		if (initial?.regionId) {
+			void loadCities(initial.regionId, true).then(() => {
+				if (initial.cityId) void loadDistricts(initial.cityId, true);
+			});
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps -- only on mount for edit mode
+	}, []);
 
 	async function handleUpload(files: FileList | null) {
 		if (!files || files.length === 0) return;
@@ -468,26 +482,25 @@ export function ListingWizard({
 							</div>
 							<div className="space-y-2">
 								<Label>{t('fields.city')}</Label>
-								<Select
-									value={cityId ? String(cityId) : ''}
+								<SearchableSelect
+									value={cityId ? String(cityId) : undefined}
 									onValueChange={(v) => {
+										if (!v) {
+											setCityId(null);
+											setDistricts([]);
+											setDistrictId(null);
+											return;
+										}
 										const id = Number(v);
 										setCityId(id);
 										loadDistricts(id);
 									}}
 									disabled={!regionId}
-								>
-									<SelectTrigger>
-										<SelectValue placeholder="—" />
-									</SelectTrigger>
-									<SelectContent>
-										{cities.map((c) => (
-											<SelectItem key={c.id} value={String(c.id)}>
-												{c[localeKey]}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
+									options={cities.map((c) => ({
+										value: String(c.id),
+										label: c[localeKey],
+									}))}
+								/>
 							</div>
 							<div className="space-y-2">
 								<Label>{t('fields.district')}</Label>

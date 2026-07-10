@@ -14,6 +14,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 import { useToast } from '@/hooks/use-toast';
 import { createEventAction } from '@/lib/admin/actions';
 import { createClient } from '@/lib/supabase/client';
@@ -128,7 +129,13 @@ export function EventForm({
 				</div>
 				<div className="space-y-2">
 					<Label>Область</Label>
-					<Select value={regionId} onValueChange={setRegionId}>
+					<Select
+						value={regionId}
+						onValueChange={(v) => {
+							setRegionId(v);
+							setCityId('');
+						}}
+					>
 						<SelectTrigger>
 							<SelectValue placeholder="—" />
 						</SelectTrigger>
@@ -143,18 +150,15 @@ export function EventForm({
 				</div>
 				<div className="space-y-2">
 					<Label>Город</Label>
-					<Select value={cityId} onValueChange={setCityId} disabled={!regionId}>
-						<SelectTrigger>
-							<SelectValue placeholder="—" />
-						</SelectTrigger>
-						<SelectContent>
-							{filteredCities.map((c) => (
-								<SelectItem key={c.id} value={String(c.id)}>
-									{c[localeKey]}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
+					<SearchableSelect
+						value={cityId || undefined}
+						onValueChange={(v) => setCityId(v ?? '')}
+						disabled={!regionId}
+						options={filteredCities.map((c) => ({
+							value: String(c.id),
+							label: c[localeKey],
+						}))}
+					/>
 				</div>
 				<div className="space-y-2 sm:col-span-2">
 					<Label htmlFor="address">Адрес</Label>

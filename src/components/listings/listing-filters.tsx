@@ -14,6 +14,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 import { createClient } from '@/lib/supabase/client';
 import { Search, X } from 'lucide-react';
 
@@ -217,25 +218,19 @@ export function ListingFilters({ categories, regions, locale, initial }: Props) 
 						</SelectContent>
 					</Select>
 					{cities.length > 0 && (
-						<Select
-							value={cityId ? String(cityId) : 'all'}
+						<SearchableSelect
+							value={cityId ? String(cityId) : undefined}
 							onValueChange={(v) => {
-								setCityId(v === 'all' ? undefined : Number(v));
+								setCityId(v ? Number(v) : undefined);
 								setDistrictId(undefined);
 							}}
-						>
-							<SelectTrigger>
-								<SelectValue placeholder={t('fields.city')} />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="all">{tCommon('all')}</SelectItem>
-								{cities.map((c) => (
-									<SelectItem key={c.id} value={String(c.id)}>
-										{c[localeKey]}
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
+							placeholder={t('fields.city')}
+							clearLabel={tCommon('all')}
+							options={cities.map((c) => ({
+								value: String(c.id),
+								label: c[localeKey],
+							}))}
+						/>
 					)}
 					{districts.length > 0 && (
 						<Select
