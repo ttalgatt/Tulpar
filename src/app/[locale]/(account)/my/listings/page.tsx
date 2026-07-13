@@ -26,7 +26,7 @@ export default async function MyListingsPage({
 	const { data: listings } = await supabase
 		.from('listings')
 		.select(
-			'id, title, price, currency, status, created_at, listing_photos(path, order_index)',
+			'id, title, price, currency, status, rejection_reason, created_at, listing_photos(path, order_index)',
 		)
 		.eq('owner_id', user!.id)
 		.order('created_at', { ascending: false });
@@ -62,34 +62,42 @@ export default async function MyListingsPage({
 						const title = l.title || '—';
 						return (
 							<Card key={l.id}>
-								<CardContent className="flex items-center gap-4 p-3">
-									<div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md bg-muted">
-										{cover ? (
-											<Image src={cover} alt={title} fill className="object-cover" sizes="80px" />
-										) : (
-											<div className="flex h-full items-center justify-center text-muted-foreground">
-												<ImageIcon className="h-8 w-8 opacity-30" />
-											</div>
-										)}
-									</div>
-									<div className="flex-1 min-w-0">
-										<Link
-											href={`/listings/${l.id}`}
-											className="line-clamp-1 font-medium hover:underline"
-										>
-											{title}
-										</Link>
-										<div className="mt-1 flex items-center gap-2 text-sm">
-											<StatusBadge status={l.status} t={t} />
-											<span className="text-muted-foreground">
-												{formatRelativeDate(l.created_at, localeTag)}
-											</span>
+								<CardContent className="p-3">
+									<div className="flex items-center gap-4">
+										<div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md bg-muted">
+											{cover ? (
+												<Image src={cover} alt={title} fill className="object-cover" sizes="80px" />
+											) : (
+												<div className="flex h-full items-center justify-center text-muted-foreground">
+													<ImageIcon className="h-8 w-8 opacity-30" />
+												</div>
+											)}
 										</div>
+										<div className="flex-1 min-w-0">
+											<Link
+												href={`/listings/${l.id}`}
+												className="line-clamp-1 font-medium hover:underline"
+											>
+												{title}
+											</Link>
+											<div className="mt-1 flex items-center gap-2 text-sm">
+												<StatusBadge status={l.status} t={t} />
+												<span className="text-muted-foreground">
+													{formatRelativeDate(l.created_at, localeTag)}
+												</span>
+											</div>
+										</div>
+										<div className="hidden text-right text-sm font-semibold sm:block">
+											{formatPrice(l.price, l.currency, localeTag) ?? '—'}
+										</div>
+										<ListingActionsMenu listingId={l.id} status={l.status} />
 									</div>
-									<div className="hidden text-right text-sm font-semibold sm:block">
-										{formatPrice(l.price, l.currency, localeTag) ?? '—'}
-									</div>
-									<ListingActionsMenu listingId={l.id} status={l.status} />
+									{l.status === 'rejected' && l.rejection_reason && (
+										<div className="mt-3 rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
+											<span className="font-medium">{t('my.rejectionReason')}: </span>
+											{l.rejection_reason}
+										</div>
+									)}
 								</CardContent>
 							</Card>
 						);

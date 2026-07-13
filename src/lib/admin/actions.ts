@@ -34,6 +34,7 @@ export async function approveListingAction(listingId: string): Promise<AdminResu
 	revalidatePath('/admin/moderation');
 	revalidatePath(`/listings/${listingId}`);
 	revalidatePath('/listings');
+	revalidatePath('/my/listings');
 	return { ok: true };
 }
 
@@ -56,6 +57,29 @@ export async function rejectListingAction(
 		.eq('id', listingId);
 	if (error) return { ok: false, error: error.message };
 	revalidatePath('/admin/moderation');
+	revalidatePath('/my/listings');
+	revalidatePath(`/listings/${listingId}`);
+	return { ok: true };
+}
+
+/** Снять опубликованное объявление с публикации (модератор/админ). */
+export async function adminArchiveListingAction(listingId: string): Promise<AdminResult> {
+	try {
+		await ensureModerator();
+	} catch {
+		return { ok: false, error: 'Forbidden' };
+	}
+	const supabase = await createClient();
+	const { error } = await supabase
+		.from('listings')
+		.update({ status: 'archived' })
+		.eq('id', listingId)
+		.eq('status', 'published');
+	if (error) return { ok: false, error: error.message };
+	revalidatePath('/listings');
+	revalidatePath(`/listings/${listingId}`);
+	revalidatePath('/my/listings');
+	revalidatePath('/');
 	return { ok: true };
 }
 

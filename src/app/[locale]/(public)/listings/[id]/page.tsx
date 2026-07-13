@@ -15,6 +15,7 @@ import { FavoriteButton } from '@/components/listings/favorite-button';
 import { Gallery } from '@/components/listings/gallery';
 import { ViewTracker } from '@/components/listings/view-tracker';
 import { ReportButton } from '@/components/listings/report-button';
+import { AdminTakeDownButton } from '@/components/admin/admin-take-down-button';
 import { Eye, MapPin, User as UserIcon } from 'lucide-react';
 
 interface PageProps {
@@ -99,7 +100,7 @@ export default async function ListingDetailPage({ params }: PageProps) {
 			.from('favorites')
 			.select('listing_id')
 			.eq('user_id', user.id)
-			.eq('listing_id', id)
+			.eq('listing_id', listing.id)
 			.maybeSingle();
 		isFavorite = !!data;
 	}
@@ -123,10 +124,11 @@ export default async function ListingDetailPage({ params }: PageProps) {
 
 	const isOwner = user?.id === listing.owner_id;
 	const showStatusBanner = listing.status !== 'published' && canView;
+	const canTakeDown = isModerator(user) && listing.status === 'published';
 
 	return (
 		<div className="container py-6">
-			<ViewTracker listingId={id} />
+			<ViewTracker listingId={listing.id} />
 
 			{showStatusBanner && (
 				<div
@@ -138,7 +140,13 @@ export default async function ListingDetailPage({ params }: PageProps) {
 								: 'border-gray-200 bg-gray-50 text-gray-700'
 					}`}
 				>
-					{t(`statuses.${listing.status}`)}
+					<p>{t(`statuses.${listing.status}`)}</p>
+					{listing.status === 'rejected' && listing.rejection_reason && (
+						<p className="mt-1 font-normal">
+							<span className="font-medium">{t('my.rejectionReason')}: </span>
+							{listing.rejection_reason}
+						</p>
+					)}
 				</div>
 			)}
 
@@ -235,12 +243,21 @@ export default async function ListingDetailPage({ params }: PageProps) {
 									phone={(listing.contact_phone as string | null) ?? seller?.phone ?? null}
 									isAuthenticated={!!user}
 								/>
-								<FavoriteButton listingId={id} initial={isFavorite} authenticated={!!user} />
+								<FavoriteButton
+									listingId={listing.id}
+									initial={isFavorite}
+									authenticated={!!user}
+								/>
 							</div>
 
 							{user && !isOwner && listing.status === 'published' && (
 								<div className="mt-2">
-									<ReportButton listingId={id} />
+									<ReportButton listingId={listing.id} />
+								</div>
+							)}
+							{canTakeDown && (
+								<div className="mt-2">
+									<AdminTakeDownButton listingId={listing.id} className="w-full" />
 								</div>
 							)}
 						</CardContent>

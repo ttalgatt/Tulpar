@@ -33,7 +33,7 @@ export default async function EditListingPage({ params }: PageProps) {
 			<h1 className="mb-6 text-2xl font-bold">{t('editTitle')}</h1>
 			<ListingWizard
 				mode="edit"
-				listingId={id}
+				listingId={listing.id}
 				userId={user!.id}
 				categories={categories}
 				regions={regions}

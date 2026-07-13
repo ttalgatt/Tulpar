@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Link, useRouter } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
 import { toggleFavoriteAction } from '@/lib/listings/favorite-actions';
+import { useToast } from '@/hooks/use-toast';
 import { Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -17,6 +18,7 @@ interface Props {
 export function FavoriteButton({ listingId, initial, authenticated }: Props) {
 	const t = useTranslations('listings.detail');
 	const router = useRouter();
+	const { toast } = useToast();
 	const [active, setActive] = useState(initial);
 	const [isPending, startTransition] = useTransition();
 
@@ -37,6 +39,8 @@ export function FavoriteButton({ listingId, initial, authenticated }: Props) {
 			if (res.ok) {
 				setActive(res.data);
 				router.refresh();
+			} else {
+				toast({ variant: 'destructive', title: res.error });
 			}
 		});
 	}

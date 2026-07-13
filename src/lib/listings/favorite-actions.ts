@@ -20,12 +20,20 @@ export async function toggleFavoriteAction(listingId: string): Promise<FavToggle
 		.maybeSingle();
 
 	if (existing) {
-		await supabase.from('favorites').delete().eq('user_id', user.id).eq('listing_id', listingId);
+		const { error } = await supabase
+			.from('favorites')
+			.delete()
+			.eq('user_id', user.id)
+			.eq('listing_id', listingId);
+		if (error) return { ok: false, error: error.message };
 		revalidatePath('/my/favorites');
 		return { ok: true, data: false };
 	}
 
-	await supabase.from('favorites').insert({ user_id: user.id, listing_id: listingId });
+	const { error } = await supabase
+		.from('favorites')
+		.insert({ user_id: user.id, listing_id: listingId });
+	if (error) return { ok: false, error: error.message };
 	revalidatePath('/my/favorites');
 	return { ok: true, data: true };
 }
