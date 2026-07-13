@@ -125,6 +125,9 @@ export default async function ListingDetailPage({ params }: PageProps) {
 	const isOwner = user?.id === listing.owner_id;
 	const showStatusBanner = listing.status !== 'published' && canView;
 	const canTakeDown = isModerator(user) && listing.status === 'published';
+	const pageSlug = listingSlug(listing.title, region?.name_ru ?? null, listing.slug ?? listing.id);
+	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://buzau.kz';
+	const pageUrl = `${siteUrl}${locale === 'kk' ? '/kk' : ''}/listings/${pageSlug}`;
 
 	return (
 		<div className="container py-6">
@@ -291,45 +294,73 @@ export default async function ListingDetailPage({ params }: PageProps) {
 				</div>
 			</div>
 
-			<ProductJsonLd
+			<ClassifiedAdJsonLd
 				title={title}
 				description={description ?? ''}
 				price={listing.price}
 				currency={listing.currency}
 				images={photos}
+				url={pageUrl}
+				datePosted={listing.created_at}
+				sellerName={seller?.full_name ?? null}
+				category={category?.[localeKey] ?? null}
+				areaServed={locationParts.join(', ') || null}
 			/>
 		</div>
 	);
 }
 
-function ProductJsonLd({
+function ClassifiedAdJsonLd({
 	title,
 	description,
 	price,
 	currency,
 	images,
+	url,
+	datePosted,
+	sellerName,
+	category,
+	areaServed,
 }: {
 	title: string;
 	description: string;
 	price: number | null;
 	currency: string;
 	images: string[];
+	url: string;
+	datePosted: string;
+	sellerName: string | null;
+	category: string | null;
+	areaServed: string | null;
 }) {
-	const data = {
+	const data: Record<string, unknown> = {
 		'@context': 'https://schema.org',
-		'@type': 'Product',
+		'@type': 'ClassifiedAd',
 		name: title,
 		description,
-		image: images,
-		offers: price
+		url,
+		datePosted,
+		image: images.length > 0 ? images : undefined,
+		category: category || undefined,
+		areaServed: areaServed || undefined,
+		seller: sellerName
 			? {
-					'@type': 'Offer',
-					price,
-					priceCurrency: currency,
-					availability: 'https://schema.org/InStock',
+					'@type': 'Person',
+					name: sellerName,
 				}
 			: undefined,
 	};
+
+	if (price != null) {
+		data.offers = {
+			'@type': 'Offer',
+			url,
+			price,
+			priceCurrency: currency,
+			availability: 'https://schema.org/InStock',
+		};
+	}
+
 	return (
 		<script
 			type="application/ld+json"
