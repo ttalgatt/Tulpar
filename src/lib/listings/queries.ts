@@ -51,6 +51,7 @@ export const fetchListings = cache(async (filters: ListingFilters): Promise<List
 	if (filters.cityId) query = query.eq('city_id', filters.cityId);
 	if (filters.districtId) query = query.eq('district_id', filters.districtId);
 	if (filters.dealType) query = query.eq('deal_type', filters.dealType);
+	if (filters.isBulk) query = query.eq('is_bulk', true);
 	if (filters.priceMin !== undefined) query = query.gte('price', filters.priceMin);
 	if (filters.priceMax !== undefined) query = query.lte('price', filters.priceMax);
 	if (filters.ageMin !== undefined) query = query.gte('age_months', filters.ageMin);

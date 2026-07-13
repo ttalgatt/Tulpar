@@ -49,6 +49,7 @@ export const listingFiltersSchema = z.object({
 	ageMax: z.coerce.number().int().nonnegative().optional(),
 	dealType: dealTypeSchema.optional(),
 	withPhoto: z.coerce.boolean().optional(),
+	isBulk: z.coerce.boolean().optional(),
 	sort: z.enum(['newest', 'priceAsc', 'priceDesc']).default('newest'),
 	page: z.coerce.number().int().positive().default(1),
 	pageSize: z.coerce.number().int().positive().max(48).default(24),

@@ -35,6 +35,7 @@ export default async function ListingsPage({
 		ageMax: pick(sp.ageMax),
 		dealType: pick(sp.dealType),
 		withPhoto: pick(sp.withPhoto),
+		isBulk: pick(sp.isBulk),
 		sort: pick(sp.sort),
 		page: pick(sp.page),
 	});

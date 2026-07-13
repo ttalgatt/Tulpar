@@ -59,6 +59,7 @@ interface Filters {
 	ageMin?: number;
 	ageMax?: number;
 	dealType?: 'sale' | 'gift' | 'exchange';
+	isBulk?: boolean;
 	sort?: 'newest' | 'priceAsc' | 'priceDesc';
 }
 
@@ -87,6 +88,7 @@ export function ListingFilters({ categories, regions, locale, initial }: Props) 
 	const [ageMin, setAgeMin] = useState(initial.ageMin?.toString() ?? '');
 	const [ageMax, setAgeMax] = useState(initial.ageMax?.toString() ?? '');
 	const [dealType, setDealType] = useState(initial.dealType);
+	const [isBulk, setIsBulk] = useState(!!initial.isBulk);
 	const [sort, setSort] = useState<Filters['sort']>(initial.sort ?? 'newest');
 	const [cities, setCities] = useState<City[]>([]);
 	const [districts, setDistricts] = useState<District[]>([]);
@@ -134,6 +136,7 @@ export function ListingFilters({ categories, regions, locale, initial }: Props) 
 		if (ageMin) params.set('ageMin', ageMin);
 		if (ageMax) params.set('ageMax', ageMax);
 		if (dealType) params.set('dealType', dealType);
+		if (isBulk) params.set('isBulk', 'true');
 		if (sort && sort !== 'newest') params.set('sort', sort);
 		const qs = params.toString();
 		startTransition(() => {
@@ -153,6 +156,7 @@ export function ListingFilters({ categories, regions, locale, initial }: Props) 
 		setAgeMin('');
 		setAgeMax('');
 		setDealType(undefined);
+		setIsBulk(false);
 		setSort('newest');
 		startTransition(() => router.push(pathname as never));
 	}
@@ -299,8 +303,8 @@ export function ListingFilters({ categories, regions, locale, initial }: Props) 
 				</div>
 			</div>
 
-			<div className="space-y-2">
-				<Label>{t('filters.dealType')}</Label>
+				<div className="space-y-2">
+					<Label>{t('filters.dealType')}</Label>
 					<Select
 						value={dealType ?? 'all'}
 						onValueChange={(v) => setDealType(v === 'all' ? undefined : (v as never))}
@@ -316,6 +320,16 @@ export function ListingFilters({ categories, regions, locale, initial }: Props) 
 						</SelectContent>
 					</Select>
 				</div>
+
+				<label className="flex items-center gap-2">
+					<input
+						type="checkbox"
+						checked={isBulk}
+						onChange={(e) => setIsBulk(e.target.checked)}
+						className="h-4 w-4 rounded border-input"
+					/>
+					<span className="text-sm">{t('filters.bulk')}</span>
+				</label>
 
 				<div className="space-y-2">
 					<Label>{t('sort.label')}</Label>
