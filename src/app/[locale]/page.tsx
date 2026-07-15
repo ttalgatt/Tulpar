@@ -7,6 +7,8 @@ import { createClient } from '@/lib/supabase/server';
 import { ListingCard } from '@/components/listings/listing-card';
 import { HomeSearch } from '@/components/listings/home-search';
 import { fetchCategories, fetchRegions } from '@/lib/listings/queries';
+import { sortCategoriesByWizardOrder } from '@/lib/listings/categories';
+import { catalogPath } from '@/lib/seo/catalog';
 import Image from 'next/image';
 import { ArrowRight, PawPrint, Calendar } from 'lucide-react';
 import { eventCoverUrl } from '@/lib/listings/storage';
@@ -64,10 +66,28 @@ export default async function HomePage({
 				</div>
 			</section>
 
-			<section className="container pt-8 pb-12">
+			<section className="container pt-8">
 				<p className="mb-8 rounded-lg border border-primary/20 bg-gradient-to-r from-primary/10 via-accent/10 to-transparent px-4 py-3 text-sm leading-relaxed text-foreground md:text-[15px]">
 					{t('launchBanner')}
 				</p>
+				<h2 className="mb-4 text-2xl font-bold">{t('popularCategories')}</h2>
+				<ul className="mb-10 flex flex-wrap gap-2">
+					{sortCategoriesByWizardOrder(categories)
+						.slice(0, 12)
+						.map((cat) => (
+							<li key={cat.id}>
+								<Link
+									href={catalogPath({ categorySlug: cat.slug })}
+									className="inline-flex rounded-md border px-3 py-1.5 text-sm hover:bg-accent"
+								>
+									{locale === 'kk' ? cat.name_kk : cat.name_ru}
+								</Link>
+							</li>
+						))}
+				</ul>
+			</section>
+
+			<section className="container pb-12">
 				<div className="mb-6 flex items-center justify-between">
 					<h2 className="text-2xl font-bold">{t('recentListings')}</h2>
 					<Button asChild variant="ghost">

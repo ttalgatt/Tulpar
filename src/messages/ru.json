@@ -258,6 +258,24 @@
 		"rejectReport": "Отклонить",
 		"noReports": "Жалоб нет"
 	},
+	"catalog": {
+		"breadcrumbRoot": "Каталог",
+		"listingsCount": "{count} объявлений",
+		"empty": "Пока нет объявлений в этой категории и локации",
+		"emptyHint": "Посмотрите соседние категории или все объявления региона",
+		"relatedCategories": "Другие категории",
+		"viewRegion": "Все объявления в регионе",
+		"viewCategoryNationwide": "По всей стране",
+		"browseAll": "Все объявления",
+		"h1Category": "{category} — объявления",
+		"h1Location": "{category} в {location}",
+		"introCategory": "Актуальные объявления в категории «{category}» на Бұзау.kz — покупка и продажа по всему Казахстану.",
+		"introLocation": "Объявления «{category}» в локации {location}. Смотрите цены, фото и контакты продавцов на Бұзау.kz.",
+		"metaTitleCategory": "{category} — купить на Бұзау.kz",
+		"metaTitleLocation": "{category} в {location} — купить на Бұзау.kz",
+		"metaDescriptionCategory": "Объявления «{category}» в Казахстане. Бесплатно размещайте и ищите на Бұзау.kz.",
+		"metaDescriptionLocation": "{category} в {location}: актуальные объявления на Бұзау.kz. Купить или продать быстро и удобно."
+	},
 	"errors": {
 		"notFound": "Страница не найдена",
 		"goHome": "На главную",

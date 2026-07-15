@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next';
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import { locales } from '@/i18n/routing';
 import { listingSlug } from '@/lib/utils';
+import { fetchCatalogSitemapEntries, localeCatalogUrl } from '@/lib/seo/catalog';
 
 const STATIC_PATHS = ['', '/listings', '/events'];
 
@@ -18,6 +19,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	);
 
 	let dynamic: MetadataRoute.Sitemap = [];
+	let catalog: MetadataRoute.Sitemap = [];
+
 	if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
 		try {
 			const supabase = createServiceRoleClient();
@@ -43,7 +46,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		} catch {
 			// fail-safe — пустой динамический sitemap
 		}
+
+		try {
+			const catalogEntries = await fetchCatalogSitemapEntries();
+			catalog = catalogEntries.flatMap((entry) =>
+				locales.map((locale) => ({
+					url: localeCatalogUrl(locale, entry.path),
+					lastModified: entry.lastModified ?? new Date(),
+					changeFrequency: 'daily' as const,
+					priority: entry.path.split('/').length <= 3 ? 0.8 : 0.7,
+				})),
+			);
+		} catch {
+			// fail-safe — без catalog URL
+		}
 	}
 
-	return [...staticEntries, ...dynamic];
+	return [...staticEntries, ...catalog, ...dynamic];
 }

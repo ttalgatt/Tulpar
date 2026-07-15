@@ -8,6 +8,7 @@ import { formatPrice, formatRelativeDate, formatAge, listingSlug } from '@/lib/u
 import { photoPublicUrl } from '@/lib/listings/storage';
 import { getCurrentUser, isModerator } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
+import { catalogPath } from '@/lib/seo/catalog';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ContactSellerButton } from '@/components/listings/contact-seller-button';
@@ -157,14 +158,43 @@ export default async function ListingDetailPage({ params }: PageProps) {
 			<Link href="/listings" className="hover:underline">
 				{t('title')}
 			</Link>
-			{category && (
+			{category?.slug && (
 				<>
 					<span className="mx-2">/</span>
 					<Link
-						href={{ pathname: '/listings', query: { kind: category.kind } }}
+						href={catalogPath({ categorySlug: category.slug })}
 						className="hover:underline"
 					>
 						{category[localeKey]}
+					</Link>
+				</>
+			)}
+			{category?.slug && region?.slug && (
+				<>
+					<span className="mx-2">/</span>
+					<Link
+						href={catalogPath({
+							categorySlug: category.slug,
+							regionSlug: region.slug,
+						})}
+						className="hover:underline"
+					>
+						{region[localeKey]}
+					</Link>
+				</>
+			)}
+			{category?.slug && region?.slug && city?.slug && (
+				<>
+					<span className="mx-2">/</span>
+					<Link
+						href={catalogPath({
+							categorySlug: category.slug,
+							regionSlug: region.slug,
+							citySlug: city.slug,
+						})}
+						className="hover:underline"
+					>
+						{city[localeKey]}
 					</Link>
 				</>
 			)}

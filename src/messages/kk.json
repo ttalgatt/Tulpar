@@ -258,6 +258,24 @@
 		"rejectReport": "Қабылдамау",
 		"noReports": "Шағым жоқ"
 	},
+	"catalog": {
+		"breadcrumbRoot": "Каталог",
+		"listingsCount": "{count} хабарландыру",
+		"empty": "Бұл санат пен орналасқан жерде әзірге хабарландыру жоқ",
+		"emptyHint": "Қосалқы санаттарды немесе өңірдегі барлық хабарландыруларды қараңыз",
+		"relatedCategories": "Басқа санаттар",
+		"viewRegion": "Өңірдегі барлық хабарландырулар",
+		"viewCategoryNationwide": "Бүкіл ел бойынша",
+		"browseAll": "Барлық хабарландырулар",
+		"h1Category": "{category} — хабарландырулар",
+		"h1Location": "{location} — {category}",
+		"introCategory": "Бұзау.kz сайтында «{category}» санатындағы өзекті хабарландырулар — Қазақстан бойынша сату-сатып алу.",
+		"introLocation": "{location} бойынша «{category}» хабарландырулары. Бағалар, фото және сатушы контактілері Бұзау.kz-те.",
+		"metaTitleCategory": "{category} — Бұзау.kz-тен сатып алу",
+		"metaTitleLocation": "{location} — {category} | Бұзау.kz",
+		"metaDescriptionCategory": "Қазақстанда «{category}» хабарландырулары. Бұзау.kz-те тегін орналастырыңыз және іздеңіз.",
+		"metaDescriptionLocation": "{location}: «{category}» хабарландырулары Бұзау.kz-те. Жылдам сатып алыңыз немесе сатыңыз."
+	},
 	"errors": {
 		"notFound": "Бет табылмады",
 		"goHome": "Басты бетке",
