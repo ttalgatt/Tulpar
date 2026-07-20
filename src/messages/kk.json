@@ -37,7 +37,9 @@
 		"profile": "Профиль",
 		"myListings": "Менің хабарландыруларым",
 		"favorites": "Таңдаулылар",
-		"admin": "Әкімшілік"
+		"admin": "Әкімшілік",
+		"userMenu": "Профиль мәзірі",
+		"userMenuWithPending": "Профиль мәзірі, модерацияда: {count}"
 	},
 	"footer": {
 		"about": "Жоба туралы",

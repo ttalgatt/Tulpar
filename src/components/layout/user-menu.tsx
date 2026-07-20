@@ -19,11 +19,18 @@ interface Props {
 	email: string;
 	userId: string;
 	isModerator?: boolean;
+	pendingModerationCount?: number;
 }
 
-export function UserMenu({ email, isModerator }: Props) {
+function formatBadgeCount(count: number): string {
+	return count > 99 ? '99+' : String(count);
+}
+
+export function UserMenu({ email, isModerator, pendingModerationCount = 0 }: Props) {
 	const t = useTranslations('nav');
 	const [isPending, startTransition] = useTransition();
+	const showModerationBadge = Boolean(isModerator && pendingModerationCount > 0);
+	const badgeLabel = formatBadgeCount(pendingModerationCount);
 
 	function signOut() {
 		startTransition(async () => {
@@ -39,8 +46,23 @@ export function UserMenu({ email, isModerator }: Props) {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button variant="ghost" size="icon" aria-label="User menu" disabled={isPending}>
+				<Button
+					variant="ghost"
+					size="icon"
+					className="relative"
+					aria-label={
+						showModerationBadge
+							? t('userMenuWithPending', { count: pendingModerationCount })
+							: t('userMenu')
+					}
+					disabled={isPending}
+				>
 					<User className="h-5 w-5" />
+					{showModerationBadge && (
+						<span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold leading-none text-destructive-foreground">
+							{badgeLabel}
+						</span>
+					)}
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end" className="w-56">
@@ -68,9 +90,17 @@ export function UserMenu({ email, isModerator }: Props) {
 				</DropdownMenuItem>
 				{isModerator && (
 					<DropdownMenuItem asChild>
-						<Link href="/admin">
+						<Link
+							href={showModerationBadge ? '/admin/moderation' : '/admin'}
+							className="flex w-full items-center"
+						>
 							<Shield className="h-4 w-4 mr-2" />
-							{t('admin')}
+							<span className="flex-1">{t('admin')}</span>
+							{showModerationBadge && (
+								<span className="ml-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-destructive px-1.5 text-[11px] font-bold leading-none text-destructive-foreground">
+									{badgeLabel}
+								</span>
+							)}
 						</Link>
 					</DropdownMenuItem>
 				)}

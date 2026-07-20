@@ -37,7 +37,9 @@
 		"profile": "Профиль",
 		"myListings": "Мои объявления",
 		"favorites": "Избранное",
-		"admin": "Админка"
+		"admin": "Админка",
+		"userMenu": "Меню профиля",
+		"userMenuWithPending": "Меню профиля, на модерации: {count}"
 	},
 	"footer": {
 		"about": "О проекте",

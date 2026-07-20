@@ -5,12 +5,24 @@ import { Button } from '@/components/ui/button';
 import { LocaleSwitcher } from '@/components/layout/locale-switcher';
 import { UserMenu } from '@/components/layout/user-menu';
 import { getCurrentUser, isModerator } from '@/lib/auth';
+import { createClient } from '@/lib/supabase/server';
 import { Plus } from 'lucide-react';
 
 export async function Header() {
 	const t = await getTranslations('nav');
 	const tCommon = await getTranslations('common');
 	const user = await getCurrentUser();
+	const moderator = isModerator(user);
+
+	let pendingModerationCount = 0;
+	if (moderator) {
+		const supabase = await createClient();
+		const { count } = await supabase
+			.from('listings')
+			.select('id', { count: 'exact', head: true })
+			.eq('status', 'pending');
+		pendingModerationCount = count ?? 0;
+	}
 
 	return (
 		<header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -75,7 +87,8 @@ export async function Header() {
 					<UserMenu
 						email={user.email ?? ''}
 						userId={user.id}
-						isModerator={isModerator(user)}
+						isModerator={moderator}
+						pendingModerationCount={pendingModerationCount}
 					/>
 				) : (
 					<Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
